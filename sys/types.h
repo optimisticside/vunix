@@ -1,0 +1,19 @@
+#ifndef _TYPES_H_
+#define _TYPES_H_
+
+#include <stdint.h>
+#include <stddef.h>
+
+/* Forward defenitions */
+struct blkdev;
+struct buf;
+struct chrdev;
+struct cpu;
+struct context;
+struct file;
+struct inode;
+struct proc;
+struct thread;
+struct tty;
+
+#endif /* !_TYPES_H_ */
