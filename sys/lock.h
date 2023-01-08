@@ -10,7 +10,7 @@ struct spinlock {
 	struct cpu *holder;	/* CPU Holding lock */
 }
 
-static inline void spin_lock(struct spinlock *lk) {
+static inline void acquire(struct spinlock *lk) {
 	if (lk->value)
 		panic("spin-lock acquire");
 
@@ -30,7 +30,7 @@ static inline void spin_lock(struct spinlock *lk) {
 	lk->cpu = mycpu();
 }
 
-static inline void spin_unlock(struct spinlock *lk) {
+static inline void release(struct spinlock *lk) {
 	lk->cpu = NULL;
 	__sync_synchronize();
 
