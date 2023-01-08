@@ -43,4 +43,4 @@ static inline void spin_unlock(struct spinlock *lk) {
 	__sync_lock_release(&lk->locked);
 }
 
-#endif // !_LOCK_H_
+#endif /* !_LOCK_H_ */
