@@ -2,6 +2,11 @@
 #define _SIG_H_
 
 /*
+ * Macro for converting a signal number to a mask.
+ */
+#define SIGMASK(n)	(1 << ((n) - 1))
+
+/*
  * Signal codes.
  */
 #define SIGHUP		1	/* Hangup */
