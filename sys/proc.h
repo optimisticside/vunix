@@ -31,7 +31,7 @@ extern struct thread {
 	int tid;			/* Unique identifier */
 	int sig;			/* Signal sent */
 	void *wchan;			/* Waiting channel */
-	int wpos;			/* Position in wait/sleep queue (if applicable) */
+	int wqpos;			/* Position in wait/sleep queue (if applicable) */
 	void *kstack;			/* Start of kernel stack */
 	struct proc *proc;		/* Controlling process */
 	struct trapframe *tframe;	/* CPU state upon interrupt (for trampoline) */
