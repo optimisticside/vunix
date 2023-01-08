@@ -15,6 +15,7 @@ struct inode;
 struct proc;
 struct space;
 struct thread;
+struct trapframe;
 struct tty;
 
 #endif /* !_TYPES_H_ */
