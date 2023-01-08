@@ -30,7 +30,8 @@ extern struct thread {
 	uint16_t flags;			/* Additional flags */
 	int tid;			/* Unique identifier */
 	int sig;			/* Signal sent */
-	void *wchan;			/* Address the thread is waiting for */
+	void *wchan;			/* Waiting channel */
+	int wpos;			/* Position in wait/sleep queue (if applicable) */
 	void *kstack;			/* Start of kernel stack */
 	struct proc *proc;		/* Controlling process */
 	struct trapframe *tframe;	/* CPU state upon interrupt (for trampoline) */
