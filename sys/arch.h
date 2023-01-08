@@ -25,6 +25,9 @@ static inline void wr_##instr(uint64_t x) {		\
 	asm volatile ("mv " instr ", %0" : : "r"(x));	\
 }
 
+#define ARCH_SREG_RW(instr) ARCH_SREG_READ(instr) ARCH_SREG_WRITE(instr)
+#define ARCH_REG_RW(reg) ARCH_REG_READ(reg) ARCH_REG_WRITE(reg)
+
 ARCH_SREG_READ(mhartid);
 ARCH_SREG_RW(mstatus);
 ARCH_SREG_RW(sstatus);
