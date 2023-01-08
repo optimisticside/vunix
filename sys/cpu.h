@@ -46,4 +46,11 @@ extern struct cpu {
 	int nirq;		/* Number of nested interrupts */	
 } cpus[NCPU];
 
+/*
+ * Retrieves the current CPU structure representing the current CPU.
+ */
+static inline struct cpu *mycpu() {
+	return &cpus[rd_mhartid()];
+}
+
 #endif /* !_CPU_H_ */
