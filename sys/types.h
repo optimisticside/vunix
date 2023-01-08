@@ -13,6 +13,7 @@ struct context;
 struct file;
 struct inode;
 struct proc;
+struct space;
 struct thread;
 struct tty;
 
