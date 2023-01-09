@@ -5,6 +5,9 @@ typedef uint64_t pde_t; 	/* Page directory entry */
 typedef uint64_t pte_t;		/* Page table entry */
 typedef uint16_t asid_t;	/* Address space identifier */
 
+typedef uint64_t paddr_t;	/* Physical address */
+typedef uint64_t vaddr_t;	/* Virtual address */
+
 /* Bits 9:8 are reserved for software. */
 #define PTE_SW_WRITE (1 << 9)
 #define PTE_SW_READ (1 << 8)
