@@ -26,4 +26,20 @@ typedef uint64_t vaddr_t;	/* Virtual address */
 #define PTE_KERN_RO (PTE_SW_READ | PTE_A | PTE_G | PTE_R | PTE_V)
 #define PTE_PROT_MASK (PTE_SW_FLAGS | PTE_D | PTE_A | PTE_RWX | PTE_V)
 
+#define PG_SIZE 4096	/* Bytes per page */
+#define PG_SHIFT 12	/* Bits of offset within a page */
+
+#define PG_ROUNDUP(sz)  (((sz)+PGSIZE-1) & ~(PGSIZE-1))
+#define PG_ROUNDDOWN(a) (((a)) & ~(PGSIZE-1))
+
+/* Shift a physical address to the right place for a PTE. */
+#define PA2PTE(pa) ((((uint64)pa) >> 12) << 10)
+#define PTE2PA(pte) (((pte) >> 10) << 12)
+#define PTE_FLAGS(pte) ((pte) & 0x3FF)
+
+/* Extract the three 9-bit page table indices from a virtual address. */
+#define PX_MASK 0x1FF /* 9 bits */
+#define PX_SHIFT(level) (PGSHIFT+(9*(level)))
+#define PX(level, va) ((((uint64) (va)) >> PXSHIFT(level)) & PXMASK)
+
 #endif /* !_PMAP_H_ */
