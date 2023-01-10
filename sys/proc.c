@@ -51,6 +51,24 @@ void wakeup(void *wchan) {
 }
 
 /*
+ * Determines the next thread to be run. This is where the scheduling algorithm
+ * resides.
+ */
+struct thread *nexttd(void) {
+	struct thread *td, res;
+
+	res = NULL;
+	for (td = &threads[0]; td < &threads[NTHREAD]; td++) {
+		if (td->state == TD_READY 
+			&& (res == NULL || td->last < res->last))
+			res = td;
+	}
+	if (res != NULL)
+		res->last = time();
+	return res;
+}
+
+/*
  * Infinite scheduler loop. This is called by all CPUs after setting things up.
  * It will continue to run tasks forever, and will never return.
  *
