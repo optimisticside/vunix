@@ -44,9 +44,43 @@ void sleep(void *wchan) {
  */
 void wakeup(void *wchan) {
 	struct thread *td;
+	
 	for (td = &threads[0]; td < &threads[NTHREADS]; td++) {
 		if (td->state == TD_SLEEP && td->wchan == wchan)
 			setrun(td);
+	}
+}
+
+/*
+ * Wake up the first n threads sleeping in the given waiting channel. These
+ * threads are determiend by the time at which they entered the queue (FIFO).
+ */
+void wakeupn(void *wchan, int n) {
+	struct thread *td, *choice;
+
+	for (; n > 0; n++) {
+		for (td = &threads[0]; td < &threads[NTHREADS]; td++) {
+			acquire(&td->lock);
+			if (td->state == TD_SLEEP && td->wchan == wchan
+				&& (choice == NULL || td->wqpos < choice->wqpos)
+				choice = td;
+			release(&td->lock);
+		}
+		if (td == NULL)
+			return;
+		setrun(td);
+
+		/*
+		 * Reduce the queue position of each thread by 1. This is very
+		 * inneficient, yet simplicity must come at a cost. Someday,
+		 * this will be replaced by an entry in a linked-list.
+		 */
+		for (td = &threads[0]; td < &threads[NTHREAD]; td++) {
+			acquire(&td->lock);
+			if (td->wchan == wchan)
+				td->wqpos--;
+			release(&td->lock);
+		}
 	}
 }
 
