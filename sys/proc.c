@@ -51,20 +51,36 @@ void wakeup(void *wchan) {
 }
 
 /*
+ * Calculates the priority for a thread to run, using its CPU usage along with
+ * other priority-related data.
+ */
+static int getpri(struct thread *td) {
+	return td->usage * (tick() - td->start);
+}
+
+/*
  * Determines the next thread to be run. This is where the scheduling algorithm
  * resides.
  */
-struct thread *nexttd(void) {
+static struct thread *nexttd(void) {
 	struct thread *td, res;
+	struct cpu *c;
+	int usage;
 
+	/* Update the CPU usage of the last-ran thread */
+	c = mycpu();
+	if ((td = c->thread) != NULL) {
+		usage = tick() - td->start;
+		td->cpu = usage + (usage - td->cpu) / 3;
+	}
 	res = NULL;
 	for (td = &threads[0]; td < &threads[NTHREAD]; td++) {
 		if (td->state == TD_READY 
-			&& (res == NULL || td->last < res->last))
+			&& (res == NULL || getpri(td) < getpri(res)))
 			res = td;
 	}
 	if (res != NULL)
-		res->last = time();
+		res->start = tick();
 	return res;
 }
 
