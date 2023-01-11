@@ -93,7 +93,7 @@ static struct thread *nexttd(void) {
  * After that, the scheduler can only be accessed by switiching to its context,
  * which is stored in the CPU structure. Uuse sched() for this.
  */
-void scheduer(void) {
+void scheduler(void) {
 	struct thread *td;
 	struct cpu *c;
 
