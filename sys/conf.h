@@ -8,11 +8,12 @@
  * at a time. Examples of these include teletypes, and serial I/O.
  */
 struct chardev {
-	int (*open)(dev_t);	/* Open a device */
-	int (*close)(dev_t);	/* Close a device */
+	int (*open)(int);	/* Open a device */
+	int (*close)(int);	/* Close a device */
 	int (*getc)();		/* Read a character */
 	int (*putc)(int);	/* Write a character */
-	int (*state)();		/* Get a character-device state (see below) */
+	int (*canrd)();		/* Determine whether a character can be read */
+	int (*canwr)();		/* Determine whether a character can be written */
 }
 
 /*
@@ -21,8 +22,8 @@ struct chardev {
  * Examples include floppy disks and hard drives.
  */t a
 struct blkdev {
-	int (*open)(dev_t);		/* Close a device */
-	int (*close)(dev_t);		/* Open a device */
+	int (*open)(int);		/* Close a device */
+	int (*close)(int);		/* Open a device */
 	int (*strat)(struct buf *);	/* I/O operation (used for reading and writing */
 }
 
