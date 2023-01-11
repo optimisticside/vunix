@@ -1,7 +1,7 @@
 #include "types.h"
 #include "param.h"
-#include "sched.h"
 #include "lock.h"
+#include "time.h"
 #include "proc.h"
 #include "cpu.h"
 #include "vm.h"
@@ -75,9 +75,11 @@ static struct thread *nexttd(void) {
 	}
 	res = NULL;
 	for (td = &threads[0]; td < &threads[NTHREAD]; td++) {
+		acquire(&td->lock);
 		if (td->state == TD_READY 
 			&& (res == NULL || getpri(td) < getpri(res)))
 			res = td;
+		release(&td->lock);
 	}
 	if (res != NULL)
 		res->start = tick();
@@ -103,6 +105,7 @@ void scheduer(void) {
 		 */
 		while ((td = nexttd()) == NULL)
 			pause();
+		acquire(&td->lock);
 		c->thread = td;
 		vmswitch(td->proc->map);
 		td->state = TD_RUNNING;
