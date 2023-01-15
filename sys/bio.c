@@ -29,7 +29,7 @@ static struct buf *getblk(int dev, uint64_t blk, int sz) {
 		if ((dt = blkdevs[major(dev)].tab) == NULL)
 			panic("devtab");
 		for (bp = dt->head; bp != NULL; bp = bp->forw) {
-			if (bp->blk != blk || bp->dev != dev)
+			if (bp->blk != blk || bp->dev != dev || bp->size != sz)
 				continue;
 			if (bp->flags & B_LOCK) {
 				sleep(bp);
@@ -43,6 +43,8 @@ static struct buf *getblk(int dev, uint64_t blk, int sz) {
 		}
 		if (bp->flags & B_DIRTY)
 			bsync(bp);
+		bp->back->forw = bp->forw;
+		bp->forw->back = bp->back;
 		bp->dev = dev;
 		bp->blk = blk;
 		bp->size = sz;
