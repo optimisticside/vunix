@@ -33,6 +33,8 @@ static void bsync(struct buf *bp) {
  * be available).
  */
 static struct buf *getblk(int dev, uint64_t blk, int sz) {
+	struct buf *bp;
+
 	for (;;) {
 		if ((bp = findblk(dev, blk, sz)) != NULL) {
 			if (bp->flags & B_LOCK) {
