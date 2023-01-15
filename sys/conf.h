@@ -20,7 +20,7 @@ struct chardev {
  * Block devices are devices that perform random-access operations on blocks:
  * segments of their data (somewhat similar to what pages are in memory).
  * Examples include floppy disks and hard drives.
- */t a
+ */
 struct blkdev {
 	int (*open)(int);		/* Close a device */
 	int (*close)(int);		/* Open a device */

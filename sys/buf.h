@@ -20,4 +20,8 @@ extern struct buf {
 	int error;		/* Error returned from I/O */
 } bufs[NBUF];
 
+struct buf *bread(int dev, uint64_t blkno, int size);
+void brelease(struct buf *bp);
+void bwrite(struct buf *bp);
+
 #endif /* !_BUF_H_ */

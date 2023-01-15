@@ -45,4 +45,9 @@ extern struct thread {
 enum { TD_NONE, TD_READY, TD_SLEEP, TD_RUN };
 enum { P_NONE, P_EMBRYO, P_ALIVE, P_DEAD, P_ZOMBIE };
 
+void sched(void);
+void sleep(void *wchan);
+void wakeup(void *wchan);
+void wakeupn(void *wchan, int n);
+
 #endif /* !_PROC_H_ */
