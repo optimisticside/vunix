@@ -5,19 +5,6 @@
 #include "buf.h"
 
 /*
- * Finds a block of the given block-number and of the given device, with the
- * given size.
- */
-static struct buf *findblk(int dev, uint64_t blk, int sz) {
-	struct buf *bp;
-
-	for (bp = &bufs[0]; bp < &bufs[NBUF]; bp++) {
-		if (bp->dev == dev && bp->blk == blk && bp->size == sz)
-			return bp;
-	}
-}
-
-/*
  * Sync a buffer with disk.
  */
 static void bsync(struct buf *bp) {
@@ -33,16 +20,22 @@ static void bsync(struct buf *bp) {
  * be available).
  */
 static struct buf *getblk(int dev, uint64_t blk, int sz) {
+	struct devtab *dt;
 	struct buf *bp;
 
+	if (major(dev) < NBLDEV)
+		panic("blkdev");
 	for (;;) {
-		if ((bp = findblk(dev, blk, sz)) != NULL) {
+		if ((dt = blkdevs[major(dev)].tab) == NULL)
+			panic("devtab");
+		for (bp = dt->head; bp != NULL; bp = bp->forw) {
+			if (bp->blk != blk || bp->dev != dev)
+				continue;
 			if (bp->flags & B_LOCK) {
 				sleep(bp);
 				continue;
 			}
 			bp->flags |= B_LOCK;
-			return bp;
 		}
 		if ((bp = balloc()) == NULL) {
 			sleep(bfreelist);
