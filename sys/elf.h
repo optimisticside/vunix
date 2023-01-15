@@ -14,7 +14,7 @@ struct elf_ident {
 	uint8_t osabi;		/* Target OS ABI */
 	uint8_t abiver;		/* ABI version */
 	uint8_t xx;		/* Reserved padding */
-}
+};
 
 /*
  * The ELF header.
@@ -34,7 +34,7 @@ struct elf_header {
 	uint16_t shentsize;	/* Size of section header table entry */
 	uint16_t shnum;		/* Number of entries in section header table */
 	uint16_t shstrndx;
-}
+};
 
 /*
  * Tells the system how to create a process image.
@@ -46,10 +46,10 @@ struct elf_program_header {
 	uint64_t paddr;		/* Physical address of segment (where physical addresses are relavent) */
 	uint64_t filesz;	/* Size of the segment in the file image */
 	uint64_t align;		/* 0 and 1 = no allignment, otherwise should be positive power of 2 */
-}
+};
 
 struct elf_section_header {
 
-}
+};
 
 #endif /* !_ELF_H_ */

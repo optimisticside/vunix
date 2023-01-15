@@ -10,7 +10,7 @@
 struct spinlock {
 	int value;		/* Value of the lock */
 	struct cpu *cpu;	/* CPU Holding lock */
-}
+};
 
 static inline void acquire(struct spinlock *lk) {
 	if (lk->value)
