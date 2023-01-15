@@ -1,6 +1,8 @@
 #ifndef _LOCK_H_
 #define _LOCK_H_
 
+#include "types.h"
+
 /*
  * Spin-locks involve CPUs looping indefinitely until the lock's value is set
  * to false. They are used for any data that is shared across CPUs.

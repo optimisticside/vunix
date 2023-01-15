@@ -1,6 +1,8 @@
 #ifndef _BUF_H_
 #define _BUF_H_
 
+#include "types.h"
+
 /*
  * A buffer is the center of all I/O operations on block devices like
  * disks. They also serve as a cache for data that is stored on the block

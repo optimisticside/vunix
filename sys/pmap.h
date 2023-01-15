@@ -1,6 +1,8 @@
 #ifndef _PMAP_H_
 #define _PMAP_H_
 
+#include "types.h"
+
 typedef uint64_t pde_t; 	/* Page directory entry */
 typedef uint64_t pte_t;		/* Page table entry */
 typedef uint16_t asid_t;	/* Address space identifier */

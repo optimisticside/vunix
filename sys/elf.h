@@ -1,6 +1,8 @@
 #ifndef _ELF_H_
 #define _ELF_H_
 
+#include "types.h"
+
 /*
  * ELF Identity header.
  */

@@ -1,6 +1,8 @@
 #ifndef _ARCH_H_
 #define _ARCH_H_
 
+#include "types.h"
+
 #define ARCH_SREG_READ(instr)				\
 static inline uint64_t rd_##instr() {			\
 	uint64_t x;					\
