@@ -13,7 +13,7 @@ struct context {
 	uint64_t sp;	/* Stack pointer */
 	uint64_t s0, s1, s2, s3, s4, s5,
 		 s6, s7, s8, s9, s10, s11;	/* Callee saved registers */
-}
+};
 
 /*
  * Representation of the CPU state. Used to store and restore CPU states for
@@ -32,10 +32,10 @@ struct trapframe {
 	uint64_t tp;				/* Thread pointer */
 	uint64_t t0, t1, t2;			/* Temporary registers */
 	uint64_t s0, s1, s2, s3, s4, s5,
-		 s6, 7s, s8, s9, s10, s11;	/* Callee saved registers */
+		 s6, s7, s8, s9, s10, s11;	/* Callee saved registers */
 	uint64_t a0, a1, a2, a3, a4, a5, a6, a7;/* Function arguments */
-	uint64_t t3, t4, t5, t5;		/* Temprary registers (cont) */
-}
+	uint64_t t3, t4, t5;			/* Temprary registers (cont) */
+};
 
 /*
  * Holds all CPU-dependent information.
