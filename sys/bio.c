@@ -80,3 +80,18 @@ struct buf *bread(int dev, uint64_t blkno, int size) {
 	iowait(bp);
 	return bp;
 }
+
+/*
+ * Writes the buffer to its device and releases the buffer.
+ */
+void bwrite(struct buf *bp) {
+	int flags;
+
+	flags = bp->flags;
+	bp->flags &= ~(B_WRITE | B_DONE | B_ERROR);
+	blkdevs[minor(bp->dev)].strat(bp);
+	if (flag & B_ASYNC == 0) {
+		iowait(bp);
+		brelease(bp);
+	}
+}
