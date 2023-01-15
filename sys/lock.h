@@ -17,7 +17,7 @@ static inline void acquire(struct spinlock *lk) {
 		panic("spin-lock acquire");
 
 	/* On RISC-V, sync_lock_test_and_set turns into an atomic swap: */
- 	while(__sync_lock_test_and_set(&lk->locked, 1) != 0)
+ 	while(__sync_lock_test_and_set(&lk->value, 1) != 0)
 		continue;
 
 	/*
@@ -42,7 +42,7 @@ static inline void release(struct spinlock *lk) {
 	 * Doesn't use a C assignment, since the C standard implies that an
 	 * assignment might be implemented with multiple store instructions.
 	 */
-	__sync_lock_release(&lk->locked);
+	__sync_lock_release(&lk->value);
 }
 
 #endif /* !_LOCK_H_ */
