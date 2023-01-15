@@ -5,21 +5,32 @@
 #include "buf.h"
 
 /*
- * Sync a buffer with disk.
+ * Pick up the device's error number and pass it to the user. If there is an
+ * error but the number is 0 set a generalized code. Actually the latter is
+ * always true because devices don't yet return specific errors.
  */
-static void bsync(struct buf *bp) {
-	struct blkdev *d;
+void geterror(struct buf *bp) {
+	struct thread *td;
 
-	if ((d = getbdev(bp->dev)) == NULL)
-		panic("bufdev");
-	(*d->strat)(bp);
+	td = mycpu()->thread;
+	if ((td->error = bp->error) == 0)
+		td->error = EIO;
+}
+
+/*
+ * Yields until I/O completion on provided buffer. Returns error to the user.
+ */
+void iowait(struct buf *bp) {
+	while ((bp->flags&B_DONE) == 0)
+		sleep(bp);
+	geterror(bp);
 }
 
 /*
  * Allocates buffer and reads from device into buffer (or yields for buffer to
  * be available).
  */
-static struct buf *getblk(int dev, uint64_t blk, int sz) {
+static struct buf *getblk(int dev, uint64_t blkno, int size) {
 	struct devtab *dt;
 	struct buf *bp;
 
@@ -29,7 +40,7 @@ static struct buf *getblk(int dev, uint64_t blk, int sz) {
 		if ((dt = blkdevs[major(dev)].tab) == NULL)
 			panic("devtab");
 		for (bp = dt->head; bp != NULL; bp = bp->forw) {
-			if (bp->blk != blk || bp->dev != dev || bp->size != sz)
+			if (bp->blkno != blkno || bp->dev != dev || bp->size != size)
 				continue;
 			if (bp->flags & B_LOCK) {
 				sleep(bp);
@@ -46,8 +57,8 @@ static struct buf *getblk(int dev, uint64_t blk, int sz) {
 		bp->back->forw = bp->forw;
 		bp->forw->back = bp->back;
 		bp->dev = dev;
-		bp->blk = blk;
-		bp->size = sz;
+		bp->blkno = blkno;
+		bp->size = size;
 		return bp;
 	}
 }
@@ -58,10 +69,14 @@ static struct buf *getblk(int dev, uint64_t blk, int sz) {
  *
  * If no buffer is found, then yields for a buffer to be available.
  */
-struct buf *bread(int dev, uint64_t blk, int sz) {
+struct buf *bread(int dev, uint64_t blkno, int size) {
 	struct buf *bp;
-	
-	if ((bp = getblk(dev, blk, sz)) != NULL) {
-		
-	}
+
+	bp = getblk(dev, blkno, size);
+	if (bp->flags B_VALID)
+		return bp;
+	bp->flags |= B_READ;
+	blkdevs[major(dev)].strat(bp);
+	iowait(bp);
+	return bp;
 }
