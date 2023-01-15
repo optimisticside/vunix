@@ -58,7 +58,7 @@ void wakeup(void *wchan) {
 void wakeupn(void *wchan, int n) {
 	struct thread *td, *choice;
 
-	for (; n > 0; n++) {
+	for (; n > 0; n--) {
 		for (td = &threads[0]; td < &threads[NTHREADS]; td++) {
 			acquire(&td->lock);
 			if (td->state == TD_SLEEP && td->wchan == wchan
