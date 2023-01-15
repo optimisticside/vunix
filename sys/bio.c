@@ -88,10 +88,11 @@ void bwrite(struct buf *bp) {
 	int flags;
 
 	flags = bp->flags;
-	bp->flags &= ~(B_WRITE | B_DONE | B_ERROR);
+	bp->flags &= ~(B_WRITE | B_DONE | B_ERROR | B_DELWRI);
 	blkdevs[minor(bp->dev)].strat(bp);
 	if (flag & B_ASYNC == 0) {
 		iowait(bp);
 		brelease(bp);
-	}
+	} else if (flag & B_DELWRI == 0)
+		geterror(bp);
 }
