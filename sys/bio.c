@@ -11,7 +11,7 @@
 static struct buf *findblk(int dev, uint64_t blk, int sz) {
 	struct buf *bp;
 
-	for (bp = &buf[0]; bp < &buf[NBUF]; bp++) {
+	for (bp = &bufs[0]; bp < &bufs[NBUF]; bp++) {
 		if (bp->dev == dev && bp->blk == blk && bp->size == sz)
 			return bp;
 	}
