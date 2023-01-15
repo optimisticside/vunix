@@ -53,7 +53,7 @@ static struct buf *getblk(int dev, uint64_t blkno, int size) {
 			continue;
 		}
 		if (bp->flags & B_DIRTY)
-			bsync(bp);
+			bwrite(bp);
 		bp->back->forw = bp->forw;
 		bp->forw->back = bp->back;
 		bp->dev = dev;
