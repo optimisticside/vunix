@@ -9,7 +9,7 @@
 #include "tty.h"
 
 struct buf bufs[NBUF];
-struct chrblk chrblks[NCBLK];
+struct cblock cblocks[NCBLOCK];
 struct cpu cpus[NCPU];
 struct inode inodes[NINODE];
 struct mount mounts[NMOUNT];

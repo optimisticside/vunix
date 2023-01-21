@@ -4,13 +4,13 @@
 #include "conf.h"
 #include "tty.h"
 
-struct chrblk cbfreelist[];
+struct cblock cbfreelist[];
 
 /*
  * Writes a character to a character list. Allocates queue-blocks if out of
  * space. The block-device equivalent to this is done in getblk().
  */
-void putc(struct chrblk *cb, int c) {
+void putc(int c, struct cblock *cb) {
 	while (cb->size == CBLKSIZ) {
 		if (cb->next == NULL) {
 			while ((cb->next = cballoc()))

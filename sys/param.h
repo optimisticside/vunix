@@ -18,7 +18,7 @@
 #define NMOUNT		32	/* Mounts */
 #define NTTY		64	/* Teletypes */
 #define NBUF		256	/* Buffers */
-#define NCBLK		256	/* Character blocks */
+#define NCBLOCK		256	/* Character blocks */
 #define NNAME		128	/* Name for things */
 #define CBLKSIZ		64	/* Character block size */
 #define MAXPATH		256	/* Path length */

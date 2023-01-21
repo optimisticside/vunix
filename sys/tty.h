@@ -20,9 +20,9 @@ struct sgttyb {
  * added to in reverse order. For example, if there was only 1 character in a
  * block, the block would be all zeros except its last byte.
  */
-struct chrblk {
+struct cblock {
 	int size;		/* Size of data (to save time) */
-	struct chrblk *next;	/* Next entry in character list */
+	struct cblock *next;	/* Next entry in character list */
 	char chars[CBLKSIZ];	/* Data */
 };
 
@@ -35,9 +35,9 @@ struct chrblk {
  * You can think of these as the character-device equivalent of buffers.
  */
 extern struct tty {
-	struct chrblk rawq;	/* Input characters from device */
-	struct chrblk canq;	/* Input characters afer erase+kill */
-	struct chrblk outq;	/* Output queue to device */
+	struct cblock rawq;	/* Input characters from device */
+	struct cblock canq;	/* Input characters afer erase+kill */
+	struct cblock outq;	/* Output queue to device */
 	int col;		/* Current column */
 	int flags;		/* Additional flags */
 	int dev;		/* Device number */
