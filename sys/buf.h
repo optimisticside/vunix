@@ -17,6 +17,7 @@ extern struct buf {
 	struct buf *forw;	/* Next buffer in queue */
 	struct buf *prev;	/* Previous buffer in queue */
 	uint64_t blkno;		/* Block number on device */
+	int size;		/* Block size */
 	int dev;		/* ID of device */
 	int error;		/* Error returned from I/O */
 } bufs[NBUF];
