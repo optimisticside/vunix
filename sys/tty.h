@@ -2,7 +2,9 @@
 #define _TTY_H_
 
 /* 
- * One allocated per entry in character list.
+ * One allocated per entry in character list. Characters in each block are
+ * added to in reverse order. For example, if there was only 1 character in a
+ * block, the block would be all zeros except its last byte.
  */
 struct chrblk {
 	struct chrblk *next;	/* Next entry in character list */
