@@ -1,5 +1,6 @@
 #include "types.h"
 #include "param.h"
+#include "print.h"
 #include "conf.h"
 #include "proc.h"
 #include "buf.h"
@@ -91,9 +92,9 @@ void bwrite(struct buf *bp) {
 	flags = bp->flags;
 	bp->flags &= ~(B_WRITE | B_DONE | B_ERROR | B_DELWRI);
 	blkdevs[minor(bp->dev)].strat(bp);
-	if (flag & B_ASYNC == 0) {
+	if (flags & B_ASYNC == 0) {
 		iowait(bp);
 		brelease(bp);
-	} else if (flag & B_DELWRI == 0)
+	} else if (flags & B_DELWRI == 0)
 		geterror(bp);
 }
