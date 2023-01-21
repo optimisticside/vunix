@@ -14,8 +14,11 @@
 #define NCPU		16	/* CPUs */
 #define NCHRDEV		64	/* Character devices */
 #define NBLKDEV		64	/* Block devices */
+#define NTTY		64	/* Teletypes */
 #define NBUF		256	/* Buffers */
+#define NCBLK		256	/* Character blocks */
 #define NNAME		128	/* Name for things */
+#define CBLKSIZ		64	/* Character block size */
 #define MAXPATH		256	/* Path length */
 
 /*

@@ -4,6 +4,17 @@
 #include "types.h"
 #include "param.h"
 
+/*
+ * Structure for stty and gtty system calls.
+ */
+struct sgttyb {
+	char ispeed;		/* Input speed */
+	char ospeed;		/* Output speed */
+	char erase;		/* Erase character */
+	char kill;		/* Kill character */
+	int flags;		/* Mode flags */
+}
+
 /* 
  * One allocated per entry in character list. Characters in each block are
  * added to in reverse order. For example, if there was only 1 character in a
@@ -26,12 +37,13 @@ extern struct tty {
 	struct chrblk rawq;	/* Input characters from device */
 	struct chrblk canq;	/* Input characters afer erase+kill */
 	struct chrblk outq;	/* Output queue to device */
+	int col;		/* Current column */
 	int flags;		/* Additional flags */
 	int dev;		/* Device number */
 	char erase;		/* Erase character */
 	char kill;		/* Kill character */
-	int ispeed;		/* Input speed (ms) */
-	int ospeed/		/* Output speed (ms) */
+	char ispeed;		/* Input speed (ms) */
+	char ospeed;		/* Output speed (ms) */
 } ttys[NTTY];
 
 #endif /* !_TTY_H_ */
