@@ -14,6 +14,7 @@
 #define NCPU		16	/* CPUs */
 #define NCHRDEV		64	/* Character devices */
 #define NBLKDEV		64	/* Block devices */
+#define NMOUNT		32	/* Mounts */
 #define NTTY		64	/* Teletypes */
 #define NBUF		256	/* Buffers */
 #define NCBLK		256	/* Character blocks */
