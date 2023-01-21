@@ -42,7 +42,7 @@ struct trapframe {
  * Holds all CPU-dependent information.
  */
 extern struct cpu {
-	struct proc *curr;	/* Currently running process */
+	struct thread *thread;	/* Currently running thread */
 	struct context sched;	/* Context to switch to for scheduler loop */
 	int nirq;		/* Number of nested interrupts */	
 } cpus[NCPU];

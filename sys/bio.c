@@ -3,6 +3,7 @@
 #include "conf.h"
 #include "proc.h"
 #include "buf.h"
+#include "cpu.h"
 
 /*
  * Pick up the device's error number and pass it to the user. If there is an
@@ -34,7 +35,7 @@ static struct buf *getblk(int dev, uint64_t blkno, int size) {
 	struct devtab *dt;
 	struct buf *bp;
 
-	if (major(dev) < NBLDEV)
+	if (major(dev) < NBLKDEV)
 		panic("blkdev");
 	for (;;) {
 		if ((dt = blkdevs[major(dev)].tab) == NULL)

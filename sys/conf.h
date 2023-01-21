@@ -2,6 +2,7 @@
 #define _CONF_H_
 
 #include "types.h"
+#include "param.h"
 
 /*
  * Character devices are those that can read and write a signel character/bute
@@ -14,7 +15,7 @@ extern struct chrdev {
 	int (*putc)(int);	/* Write a character */
 	int (*canrd)();		/* Determine whether a character can be read */
 	int (*canwr)();		/* Determine whether a character can be written */
-} chrdevs[NDEV];
+} chrdevs[NCHRDEV];
 
 /*
  * Block devices are devices that perform random-access operations on blocks:
@@ -25,6 +26,6 @@ extern struct blkdev {
 	int (*open)(int);		/* Close a device */
 	int (*close)(int);		/* Open a device */
 	int (*strat)(struct buf *);	/* I/O operation (used for reading and writing */
-} blkdevs[NDEV];
+} blkdevs[NBLKDEV];
 
 #endif /* !_CONF_H_ */
