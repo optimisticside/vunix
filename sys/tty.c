@@ -5,7 +5,7 @@
 #include "tty.h"
 
 /*
- * Write a character to a character list. Allocates queue-blocks if out of
+ * Writes a character to a character list. Allocates queue-blocks if out of
  * space. The block-device equivalent to this is done in getblk().
  */
 void putc(struct chrblk *cb, int c) {
@@ -16,5 +16,20 @@ void putc(struct chrblk *cb, int c) {
 		}
 		cb = cb->next;
 	}
-	cb->chars[cb->size++] = c;
+	cb->chars[sizeof(cb->chars) - cb->size++] = c;
+}
+
+/*
+ * Writes a character to a character list.
+ */
+int getc(struct chrblk *cb) {
+	char *cp;
+	char c;
+
+	if (cb->size == 0)
+		return '\0';
+	c = cb->chars[sizeof(cb->chars) - cb->size--];
+	for (cp = &cb->chars[sizeof(cb->chars)];
+		cp < &cb->chars[sizeof(cb->chars) - cb->size]; cp++)
+		*cp = *(cp - 1);
 }
