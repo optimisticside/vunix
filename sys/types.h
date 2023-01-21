@@ -19,4 +19,9 @@ struct thread;
 struct trapframe;
 struct tty;
 
+/* Device ID operations */
+#define major(dev)  ((dev) >> 16 & 0xFFFF)
+#define minor(dev)  ((dev) & 0xFFFF)
+#define	mkdev(maj,min)  ((uint)((major)<<16 | (min)))
+
 #endif /* !_TYPES_H_ */
