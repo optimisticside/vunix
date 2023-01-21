@@ -16,15 +16,15 @@ static inline void wr_##instr(uint64_t x) {		\
 }
 
 #define ARCH_REG_READ(reg)				\
-static inline uint64_t rd_##instr() {			\
+static inline uint64_t rd_##reg() {			\
 	uint64_t x;					\
-	asm volatile ("mv %0, " instr : "=r" (x));	\
+	asm volatile ("mv %0, " reg : "=r" (x));	\
 	return x;					\
 }
 
 #define ARCH_REG_WRITE(reg)				\
-static inline void wr_##instr(uint64_t x) {		\
-	asm volatile ("mv " instr ", %0" : : "r"(x));	\
+static inline void wr_##reg(uint64_t x) {		\
+	asm volatile ("mv " reg ", %0" : : "r"(x));	\
 }
 
 #define ARCH_SREG_RW(instr) ARCH_SREG_READ(instr) ARCH_SREG_WRITE(instr)
