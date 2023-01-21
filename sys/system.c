@@ -7,7 +7,9 @@
 #include "proc.h"
 
 struct buf bufs[NBUF];
+struct chrblk chrblks[NCHRBLK];
 struct cpu cpus[NCPU];
 struct inode inodes[NINODE];
 struct proc procs[NPROC];
 struct thread threads[NTHREAD];
+struct tty ttys[NTTY];
