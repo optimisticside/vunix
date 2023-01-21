@@ -12,9 +12,27 @@
 #define NOFILE		16	/* Open threads per process */
 #define NFILE		128	/* Open files per system */
 #define NCPU		16	/* CPUs */
-#define NDEV		64	/* Devices */
+#define NCHRDEV		64	/* Character devices */
+#define NBLKDEV		64	/* Block devices */
 #define NBUF		256	/* Buffers */
 #define NNAME		128	/* Name for things */
 #define MAXPATH		256	/* Path length */
+
+/*
+ * System call errors. These are returned upon unsuccessful system calls.
+ */
+#define EPERM		1	/* Operation not permitted */
+#define ENOENT		2	/* No such file or directory */
+#define ESRCH		3	/* No such process */
+#define EINTR		4	/* Interrupted syscall */
+#define EIO		5	/* I/O error */
+#define ENODEV		6	/* No device */
+#define ENOMEM		7	/* Out of memory */
+#define EFAULT		8	/* Bad address */
+#define EBUSY		9	/* Device or resource busy */
+#define EINVAL		10	/* Invalid argument */
+#define ENOTTY		11	/* Not a teletype */
+#define EPIPE		12	/* Broken pipe */
+#define ENOSYS		13	/* Invalid system call */
 
 #endif /* !_PARAM_H_ */
