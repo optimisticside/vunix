@@ -4,8 +4,8 @@
 /* 
  * One allocated per entry in character list.
  */
-struct clist {
-	struct clistent *next;	/* Next entry in character list */
+struct chrblk {
+	struct chrblk *next;	/* Next entry in character list */
 	char chars[32];		/* Data */
 };
 
@@ -18,9 +18,9 @@ struct clist {
  * You can think of these as the character-device equivalent of buffers.
  */
 extern struct tty {
-	struct clist rawq;	/* Input characters from device */
-	struct clist canq;	/* Input characters afer erase+kill */
-	sturct clist outq;	/* Output queue to device */
+	struct chrblk rawq;	/* Input characters from device */
+	struct chrblk canq;	/* Input characters afer erase+kill */
+	struct chrblk outq;	/* Output queue to device */
 	int flags;		/* Additional flags */
 	int dev;		/* Device number */
 	char erase;		/* Erase character */
