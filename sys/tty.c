@@ -9,14 +9,14 @@
  * space. The block-device equivalent to this is done in getblk().
  */
 void putc(struct chrblk *cb, int c) {
-	while (cb->size == sizeof(cb->chars)) {
+	while (cb->size == CBLKSIZ) {
 		if (cb->next == NULL) {
 			while ((cb->next = cballoc()))
 				sleep(cbfreelist);
 		}
 		cb = cb->next;
 	}
-	cb->chars[sizeof(cb->chars) - cb->size++] = c;
+	cb->chars[CBLKSIZ - cb->size++] = c;
 }
 
 /*
@@ -28,8 +28,8 @@ int getc(struct chrblk *cb) {
 
 	if (cb->size == 0)
 		return '\0';
-	c = cb->chars[sizeof(cb->chars) - cb->size--];
-	for (cp = &cb->chars[sizeof(cb->chars)];
-		cp < &cb->chars[sizeof(cb->chars) - cb->size]; cp++)
+	c = cb->chars[CBLKSIZ - cb->size--];
+	for (cp = &cb->chars[CBLKSIZ];
+		cp < &cb->chars[CBLKSIZ - cb->size]; cp++)
 		*cp = *(cp - 1);
 }

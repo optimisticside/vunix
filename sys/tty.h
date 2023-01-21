@@ -1,6 +1,9 @@
 #ifndef _TTY_H_
 #define _TTY_H_
 
+#include "types.h"
+#include "param.h"
+
 /* 
  * One allocated per entry in character list. Characters in each block are
  * added to in reverse order. For example, if there was only 1 character in a
@@ -8,7 +11,7 @@
  */
 struct chrblk {
 	struct chrblk *next;	/* Next entry in character list */
-	char chars[32];		/* Data */
+	char chars[CBLKSZ];	/* Data */
 };
 
 /*
