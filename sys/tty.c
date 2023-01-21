@@ -32,4 +32,5 @@ int getc(struct chrblk *cb) {
 	for (cp = &cb->chars[CBLKSIZ];
 		cp < &cb->chars[CBLKSIZ - cb->size]; cp++)
 		*cp = *(cp - 1);
+	return c;
 }
