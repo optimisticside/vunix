@@ -37,7 +37,7 @@ struct superblock {
 	uint32_t zones;		/* Number of zones */
 	uint16_t magic;		/* Magic number */
 	uint16_t xx2;		/* Unused */
-	uint16_t blksize;	/* Block size (bytes) */
+	uint16_t blksz;		/* Block size (bytes) */
 	uint8_t diskver;	/* Disk version */
 };
 
