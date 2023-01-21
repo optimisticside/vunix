@@ -9,6 +9,7 @@
  */
 #define NPROC		64	/* Processes */
 #define NTHREAD		256	/* Threads */
+#define NINODE		1024	/* I-Nodes */
 #define NOFILE		16	/* Open threads per process */
 #define NFILE		128	/* Open files per system */
 #define NCPU		16	/* CPUs */

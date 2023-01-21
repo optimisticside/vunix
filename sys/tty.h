@@ -13,7 +13,7 @@ struct sgttyb {
 	char erase;		/* Erase character */
 	char kill;		/* Kill character */
 	int flags;		/* Mode flags */
-}
+};
 
 /* 
  * One allocated per entry in character list. Characters in each block are
@@ -21,8 +21,9 @@ struct sgttyb {
  * block, the block would be all zeros except its last byte.
  */
 struct chrblk {
+	int size;		/* Size of data (to save time) */
 	struct chrblk *next;	/* Next entry in character list */
-	char chars[CBLKSZ];	/* Data */
+	char chars[CBLKSIZ];	/* Data */
 };
 
 /*

@@ -1,4 +1,4 @@
-#define _FILSYS_H_
+#ifndef _FILSYS_H_
 #define _FILSYS_H_
 
 #include "types.h"
