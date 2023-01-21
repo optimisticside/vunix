@@ -13,6 +13,8 @@
 #define NFILE		128	/* Open files per system */
 #define NCPU		16	/* CPUs */
 #define NDEV		64	/* Devices */
+#define NBUF		256	/* Buffers */
+#define NNAME		128	/* Name for things */
 #define MAXPATH		256	/* Path length */
 
 #endif /* !_PARAM_H_ */

@@ -2,6 +2,7 @@
 #define _PROC_H_
 
 #include "types.h"
+#include "param.h"
 
 /*
  * A process is defined as an independent image of execution in the operating

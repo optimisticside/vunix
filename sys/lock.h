@@ -2,6 +2,8 @@
 #define _LOCK_H_
 
 #include "types.h"
+#include "print.h"
+#include "cpu.h"
 
 /*
  * Spin-locks involve CPUs looping indefinitely until the lock's value is set

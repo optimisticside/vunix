@@ -14,7 +14,7 @@ extern struct chrdev {
 	int (*putc)(int);	/* Write a character */
 	int (*canrd)();		/* Determine whether a character can be read */
 	int (*canwr)();		/* Determine whether a character can be written */
-} chrdevs[NCHRDEV];
+} chrdevs[NDEV];
 
 /*
  * Block devices are devices that perform random-access operations on blocks:
@@ -25,6 +25,6 @@ extern struct blkdev {
 	int (*open)(int);		/* Close a device */
 	int (*close)(int);		/* Open a device */
 	int (*strat)(struct buf *);	/* I/O operation (used for reading and writing */
-} blkdevs[NBLKDEV];
+} blkdevs[NDEV];
 
 #endif /* !_CONF_H_ */

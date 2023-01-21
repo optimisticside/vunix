@@ -2,6 +2,7 @@
 #define _CPU_H_
 
 #include "types.h"
+#include "param.h"
 
 /*
  * Representation of a CPU context (function) in the kernel that can be
@@ -41,7 +42,7 @@ struct trapframe {
  * Holds all CPU-dependent information.
  */
 extern struct cpu {
-	struct proc curr;	/* Currently running process */
+	struct proc *curr;	/* Currently running process */
 	struct context sched;	/* Context to switch to for scheduler loop */
 	int nirq;		/* Number of nested interrupts */	
 } cpus[NCPU];

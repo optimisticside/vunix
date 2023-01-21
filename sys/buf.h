@@ -2,6 +2,7 @@
 #define _BUF_H_
 
 #include "types.h"
+#include "param.h"
 
 /*
  * A buffer is the center of all I/O operations on block devices like
