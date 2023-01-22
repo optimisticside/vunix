@@ -12,7 +12,7 @@ struct file {
 	char flags;		/* Access flags */
 	char count;		/* Reference count */
 	struct inode *inode;	/* Internal I-Node */
-	uint64_t offset;	/* Read/write character pointer */
+	size_t offset;		/* Read/write character pointer */
 };
 
 /* File flags */

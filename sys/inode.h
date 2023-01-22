@@ -11,12 +11,12 @@ struct inode {
 	int flags;		/* Additional flags */
 	char count;		/* Reference count */
 	int dev;		/* Device number */
-	uint64_t num;		/* I-node number on device */
-	uint16_t mode;		/* Access mode */
-	short nlink;		/* Directory entries */
-	short uid;		/* Owner */
-	short gid;		/* Group of owner */
-	uint64_t size;		/* Size of file */
+	size_t num;		/* I-node number on device */
+	int mode;		/* Access mode */
+	int nlink;		/* Directory entries */
+	int uid;		/* Owner */
+	int gid;		/* Group of owner */
+	size_t size;		/* Size of file */
 }
 
 /* Flag defenitions */

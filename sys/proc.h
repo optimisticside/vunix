@@ -10,7 +10,7 @@
  */
 extern struct proc {
 	char state;			/* Current state */
-	uint8_t flags;			/* Additional flags */
+	int flags;			/* Additional flags */
 	int pid;			/* Unique identifier */
 	int exit;			/* Exit code */
 	char name[NNAME];		/* Name (for debugging purposes) */
