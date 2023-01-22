@@ -5,13 +5,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-/* System types (equivalent to what's stored in sys/types.h ) */
-typedef uint32_t dev_t;		/* Device number */
-typedef size_t ino_t;		/* I-Node number */
-typedef size_t blkno_t;		/* Block number */
-typedef int64_t time_t;		/* Time */
-typedef size_t off_t;		/* File offsets */
-
 /* Forward defenitions */
 struct blkdev;
 struct buf;
