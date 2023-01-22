@@ -24,7 +24,7 @@ struct dinode {
 
 /*
  * Structure of the file-system super block as it resides on the disk. Usually
- * stored in the first block of the disk that holds the file-system.
+ * stored in the second block of the disk that holds the file-system.
  */
 struct superblock {
 	uint16_t ninodes;	/* Number of I-nodes */
