@@ -32,7 +32,7 @@ void iowait(struct buf *bp) {
  * Allocates buffer and reads from device into buffer (or yields for buffer to
  * be available).
  */
-static struct buf *getblk(int dev, uint64_t blkno, int size) {
+static struct buf *getblk(int dev, size_t blkno, int size) {
 	struct devtab *dt;
 	struct buf *bp;
 
