@@ -12,6 +12,7 @@ struct inode {
 	char count;		/* Reference count */
 	int dev;		/* Device number */
 	uint64_t num;		/* I-node number on device */
+	uint16_t mode;		/* Access mode */
 	short nlink;		/* Directory entries */
 	short uid;		/* Owner */
 	short gid;		/* Group of owner */
