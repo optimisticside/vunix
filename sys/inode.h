@@ -18,4 +18,12 @@ struct inode {
 	uint64_t size;		/* Size of file */
 }
 
+/* Flag defenitions */
+#define I_LOCK	1		/* Locked */
+#define I_UPD	2		/* Updated */
+#define I_ACC	4		/* Accessed */
+#define I_MOUNT	8		/* Mounted */
+#define I_WANT	12		/* Wanted */
+#define I_CHG	16		/* Modified */
+
 #endif /* !_INODE_H_ */
