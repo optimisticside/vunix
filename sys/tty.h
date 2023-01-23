@@ -21,9 +21,10 @@ struct sgttyb {
  * block, the block would be all zeros except its last byte.
  */
 struct cblock {
-	size_t size;		/* Size of data (to save time) */
+	struct spinlock *lock;	/* Spin lock */
 	struct cblock *next;	/* Next entry in character list */
 	char chars[CBLKSIZ];	/* Data */
+	size_t size;		/* Size of data (to save time) */
 };
 
 /*
