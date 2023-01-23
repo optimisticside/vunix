@@ -6,6 +6,11 @@
 #include "arch.h"
 
 /*
+ * Kernel console device.
+ */
+extern int console;
+
+/*
  * A panic is when a non-recoverable error occurs in the kernel, and the only
  * thing that can be done is to spin forever.
  */
