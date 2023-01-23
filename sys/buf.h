@@ -13,10 +13,11 @@
  * buffer (the actual buffer comes right after this structure).
  */
 extern struct buf {
-	int flags;		/* Additional flags */
+	struct spinlock *lock;	/* Spin lock */
 	struct buf *forw;	/* Next buffer in queue */
 	struct buf *back;	/* Previous buffer in queue */
 	uint64_t blkno;		/* Block number on device */
+	int flags;		/* Additional flags */
 	int size;		/* Block size */
 	int dev;		/* ID of device */
 	int error;		/* Error returned from I/O */

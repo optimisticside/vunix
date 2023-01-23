@@ -35,6 +35,7 @@ struct cblock {
  * You can think of these as the character-device equivalent of buffers.
  */
 extern struct tty {
+	struct spinlock *lock;	/* Spin lock */
 	struct cblock rawq;	/* Input characters from device */
 	struct cblock canq;	/* Input characters afer erase+kill */
 	struct cblock outq;	/* Output queue to device */

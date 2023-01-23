@@ -9,9 +9,10 @@
  * file-system hierarchy (virtual file-system).
  */
 extern struct mount {
-	int dev;		/* Device mounted */
-	struct buf *buf;	/* Pointer to superblock */
+	struct spinlock *lock;	/* Spin lock */
 	struct inode *inode;	/* Mounted I-Node */
+	struct buf *buf;	/* Pointer to superblock */
+	int dev;		/* Device mounted */
 } mounts[NMOUNT];
 
 #endif /* !_MOUNT_H_ */
