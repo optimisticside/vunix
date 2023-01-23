@@ -4,5 +4,3 @@
 #include "conf.h"
 #include "proc.h"
 #include "lock.h"
-
-void 
