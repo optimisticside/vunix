@@ -27,4 +27,10 @@ struct inode {
 #define I_WANT	12		/* Wanted */
 #define I_CHG	16		/* Modified */
 
+struct inode *iget(int dev, size_t ino);
+void iput(struct inode *ip, void *buf, size_t count);
+void readi(struct inode *ip, void *buf, size_t count);
+void writei(struct inode *ip, struct buf *bp);
+struct inode *namei(char *path);
+
 #endif /* !_INODE_H_ */

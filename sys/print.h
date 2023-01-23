@@ -17,7 +17,10 @@ extern int console;
 __attribute__ ((noreturn)) static inline void panic(char *str) {
 	printf("panic: %s\n", str);
 	for (;;)
-		continue;
+		pause();
 }
+
+void putchar(int c);
+void printf(const char *fmt, ...);
 
 #endif /* !_PRINT_H_ */
