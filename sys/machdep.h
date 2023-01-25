@@ -1,5 +1,5 @@
-#ifndef _ARCH_H_
-#define _ARCH_H_
+#ifndef _MACHDEP_H_
+#define _MACHDEP_H_
 
 #include "types.h"
 
@@ -73,4 +73,4 @@ ARCH_REG_READ(ra);
 #define SATP_SV39 (8L << 60)
 #define MAKE_SATP(pagetable) (SATP_SV39 | (((uint64)pagetable) >> 12))
 
-#endif /* !_ARCH_H_ */
+#endif /* !_MECHDEP_H_ */

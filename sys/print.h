@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "param.h"
-#include "arch.h"
+#include "machdep.h"
 
 /*
  * Kernel console device.
