@@ -8,7 +8,7 @@
  * An I-Node is the center of all file-system operations done. It represents a
  * node in the file system, whether that be a directory, file, or some device.
  */
-struct inode {
+extern struct inode {
 	struct spinlock lock;	/* Spin lock */
 	int flags;		/* Additional flags */
 	char count;		/* Reference count */
@@ -19,7 +19,7 @@ struct inode {
 	int uid;		/* Owner */
 	int gid;		/* Group of owner */
 	size_t size;		/* Size of file */
-};
+} inode[NINODE];
 
 /* Flag defenitions */
 #define I_LOCK	1		/* Locked */
