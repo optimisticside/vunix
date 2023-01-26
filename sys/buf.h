@@ -52,7 +52,7 @@ struct devtab {
 
 struct buf *balloc(void);
 void binit(void);
-struct buf *bread(int dev, size_t blkno, int size);
+struct buf *bread(int dev, size_t blkno);
 void brelease(struct buf *bp);
 void bwrite(struct buf *bp);
 
