@@ -25,8 +25,8 @@ void start(void) {
 	binit();
 	iinit();
 
-	chrdevs[major(consdev)].open(consdev);
-	rootdir = iget(rootdev, ROOT_INO);
+	chrdevs[major(CONS_DEV)].open(CONS_DEV);
+	rootdir = iget(ROOT_DEV, ROOT_INO);
 	rootdir->flags &= I_LOCK;
 	scheduler();
 }

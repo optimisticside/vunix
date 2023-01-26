@@ -8,8 +8,8 @@
 static void putchar(int c) {
 	struct chrdev *dp;
 
-	dp = chrdevs[major(console.dev)];
-	dp->putc(minor(console.dev), c);
+	dp = chrdevs[major(CONS_DEV)];
+	dp->putc(CONS_DEV, c);
 }
 
 /*

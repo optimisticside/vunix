@@ -40,4 +40,10 @@
 #define EPIPE		12	/* Broken pipe */
 #define ENOSYS		13	/* Invalid system call */
 
+/*
+ * I/O related constants.
+ */
+#define ROOTDEV		0	/* Boot disk */
+#define CONSDEV		0	/* Console */
+
 #endif /* !_PARAM_H_ */
