@@ -5,7 +5,7 @@
 /*
  * Write a character to the kernel console-device (usually on serial).
  */
-static void putchar(int c) {
+void putchar(int c) {
 	struct chrdev *dp;
 
 	dp = &chrdevs[major(CONS_DEV)];
