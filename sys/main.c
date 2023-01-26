@@ -9,6 +9,29 @@
 #include "tty.h"
 
 /*
+ * Main kernel initialization routine. This can be only called on one cpu.
+ */
+void start(void) {
+	struct thread *td;
+	struct proc *p;
+
+	p = palloc();
+	td = tdalloc();
+	td->proc = p;
+	td->state = T_RUN;
+	mycpu()->thread = td;
+
+	cinit();
+	binit();
+	iinit();
+
+	chrdevs[major(consdev)].open(consdev);
+	rootdir = iget(rootdev, ROOT_INO);
+	rootdir->flags &= I_LOCK;
+	scheduler();
+}
+
+/*
  * I-Node initialization routine. Reads the root-device's superblock and
  * initializes the current date from the last modified date.
  */
