@@ -10,9 +10,10 @@
  * unable to find free I-Node or if an I/O error occured.
  */
 struct inode *iget(int dev, size_t ino) {
-	struct inode *ip *oip;
-	struct mount *mp;
+	struct inode *ip, *oip;
 	struct thread *td;
+	struct mount *mp;
+	struct buf *bp;
 
 	td = mycpu()->thread;
 	for (;;) {

@@ -1,6 +1,7 @@
 #include "types.h"
 #include "param.h"
 #include "inode.h"
+#include "mount.h"
 #include "conf.h"
 #include "lock.h"
 #include "proc.h"
@@ -54,7 +55,7 @@ void iinit(void) {
 	memcpy(bp->addr, cp->addr, sizeof(struct superblock *));
 	brelease(bp);
 	mounts[0].buf = cp;
-	mounts[0].dev = rootdev;
+	mounts[0].dev = ROOT_DEV;
 }
 
 /*

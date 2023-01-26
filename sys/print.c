@@ -8,7 +8,7 @@
 static void putchar(int c) {
 	struct chrdev *dp;
 
-	dp = chrdevs[major(CONS_DEV)];
+	dp = &chrdevs[major(CONS_DEV)];
 	dp->putc(CONS_DEV, c);
 }
 
@@ -45,7 +45,7 @@ void printf(const char *fmt, ...) {
 		}
 		c = *fmt++;
 		if (c == 'd' || c == 'l' || c == 'x')
-			printn((size_t)va_arg(c, int), c == 'x' ? 16 : 10);
+			printn((size_t)va_arg(args, int), c == 'x' ? 16 : 10);
 		if (c == 's') {
 			str = (char *)va_arg(args, const char *);
 			while ((c = *str++) != '\0')
