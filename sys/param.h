@@ -39,6 +39,7 @@
 #define ENOTTY		11	/* Not a teletype */
 #define EPIPE		12	/* Broken pipe */
 #define ENOSYS		13	/* Invalid system call */
+#define ENFILE		14	/* Too many file descriptors */
 
 /*
  * I/O related constants.

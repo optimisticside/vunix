@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "param.h"
+#include "machdep.h"
 
 /*
  * Representation of a CPU context (function) in the kernel that can be
