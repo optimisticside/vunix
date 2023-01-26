@@ -11,10 +11,10 @@
 extern struct chrdev {
 	int (*open)(int);	/* Open a device */
 	int (*close)(int);	/* Close a device */
-	int (*getc)();		/* Read a character */
-	int (*putc)(int);	/* Write a character */
-	int (*canrd)();		/* Determine whether a character can be read */
-	int (*canwr)();		/* Determine whether a character can be written */
+	int (*getc)(int);	/* Read a character */
+	int (*putc)(int, int);	/* Write a character */
+	int (*canrd)(int);	/* Determine whether a character can be read */
+	int (*canwr)(int);	/* Determine whether a character can be written */
 } chrdevs[NCHRDEV];
 
 /*
@@ -25,7 +25,7 @@ extern struct chrdev {
 extern struct blkdev {
 	int (*open)(int);		/* Close a device */
 	int (*close)(int);		/* Open a device */
-	int (*strat)(struct buf *);	/* I/O operation (used for reading and writing */
+	int (*strat)(int, struct buf *);/* I/O operation (used for reading and writing */
 } blkdevs[NBLKDEV];
 
 #endif /* !_CONF_H_ */
