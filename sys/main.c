@@ -9,6 +9,12 @@
 #include "tty.h"
 
 /*
+ * Set by the first CPU after it has completed the initialization process. All
+ * other CPUs will wait for this to be set before starting.
+ */
+int started = 0;
+
+/*
  * Main kernel initialization routine. This can be only called on one cpu.
  */
 void start(void) {
@@ -18,7 +24,7 @@ void start(void) {
 	p = palloc();
 	td = tdalloc();
 	td->proc = p;
-	td->state = T_RUN;
+	td->state = TD_RUN;
 	mycpu()->thread = td;
 
 	cinit();
@@ -28,7 +34,7 @@ void start(void) {
 	chrdevs[major(CONS_DEV)].open(CONS_DEV);
 	rootdir = iget(ROOT_DEV, ROOT_INO);
 	rootdir->flags &= I_LOCK;
-	scheduler();
+	started = 1;
 }
 
 /*
@@ -47,8 +53,8 @@ void iinit(void) {
 		panic("iinit");
 	memcpy(bp->addr, cp->addr, sizeof(struct superblock *));
 	brelease(bp);
-	mount[0].buf = cp;
-	mount[0].dev = rootdev;
+	mounts[0].buf = cp;
+	mounts[0].dev = rootdev;
 }
 
 /*

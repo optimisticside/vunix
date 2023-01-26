@@ -24,7 +24,7 @@ struct inode *iget(int dev, size_t ino) {
 					sleep(ip);
 					goto loop;
 				} else if (ip->flags&I_MOUNT) {
-					for (mp = &mount[0]; mp < &mount[NMOUNT]; mp++) {
+					for (mp = &mounts[0]; mp < &mounts[NMOUNT]; mp++) {
 						if (mp->inode == ip) {
 							release(&ip->lock);
 							dev = mp->dev;
