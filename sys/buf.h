@@ -48,6 +48,8 @@ struct devtab {
 #define	B_ASYNC		246	/* Don't wait for I/O completion */
 #define	B_DELWRI	512	/* Don't write till block leaves available list */
 
+struct buf *balloc(void);
+void binit(void);
 struct buf *bread(int dev, size_t blkno, int size);
 void brelease(struct buf *bp);
 void bwrite(struct buf *bp);

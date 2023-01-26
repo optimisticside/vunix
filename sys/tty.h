@@ -49,4 +49,6 @@ extern struct tty {
 	char ospeed;		/* Output speed (ms) */
 } ttys[NTTY];
 
+void cinit(void);
+
 #endif /* !_TTY_H_ */
