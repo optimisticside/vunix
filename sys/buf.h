@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "param.h"
+#include "lock.h"
 
 /*
  * A buffer is the center of all I/O operations on block devices like
@@ -13,7 +14,7 @@
  * buffer (the actual buffer comes right after this structure).
  */
 extern struct buf {
-	struct spinlock *lock;	/* Spin lock */
+	struct spinlock lock;	/* Spin lock */
 	struct buf *forw;	/* Next buffer in queue */
 	struct buf *back;	/* Previous buffer in queue */
 	uint64_t blkno;		/* Block number on device */

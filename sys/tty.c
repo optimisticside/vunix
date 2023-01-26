@@ -41,6 +41,6 @@ int getc(struct cblock *cb) {
 	for (cp = &cb->chars[CBLKSIZ];
 		cp < &cb->chars[CBLKSIZ - cb->size]; cp++)
 		*cp = *(cp - 1);
-	release(&cp->lock);
+	release(&cb->lock);
 	return c;
 }

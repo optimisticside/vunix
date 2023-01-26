@@ -2,6 +2,7 @@
 #define _INODE_H_
 
 #include "types.h"
+#include "lock.h"
 
 /*
  * An I-Node is the center of all file-system operations done. It represents a
@@ -18,7 +19,7 @@ struct inode {
 	int uid;		/* Owner */
 	int gid;		/* Group of owner */
 	size_t size;		/* Size of file */
-}
+};
 
 /* Flag defenitions */
 #define I_LOCK	1		/* Locked */

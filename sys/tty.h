@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "param.h"
+#include "lock.h"
 
 /*
  * Structure for stty and gtty system calls.

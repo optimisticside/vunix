@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "param.h"
+#include "lock.h"
 
 /*
  * Mounts allow the use of multiple file-systems or disks in the same

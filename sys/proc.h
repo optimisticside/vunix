@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "param.h"
+#include "lock.h"
 
 /*
  * A process is defined as an independent image of execution in the operating
