@@ -1,5 +1,6 @@
 #include "types.h"
 #include "param.h"
+#include "filsys.h"
 #include "inode.h"
 #include "mount.h"
 #include "conf.h"
@@ -19,6 +20,7 @@ int started = 0;
  * Main kernel initialization routine. This can be only called on one cpu.
  */
 void start(void) {
+	struct superblock *sb;
 	struct thread *td;
 	struct proc *p;
 
@@ -30,10 +32,10 @@ void start(void) {
 
 	cinit();
 	binit();
-	iinit();
+	sb = iinit();
 
 	chrdevs[major(CONS_DEV)].open(CONS_DEV);
-	rootdir = iget(ROOT_DEV, ROOT_INO);
+	rootdir = iget(ROOT_DEV, rootino(sb));
 	rootdir->flags &= I_LOCK;
 	started = 1;
 }
@@ -42,13 +44,13 @@ void start(void) {
  * I-Node initialization routine. Reads the root-device's superblock and
  * initializes the current date from the last modified date.
  */
-void iinit(void) {
+struct superblock *iinit(void) {
 	struct buf *cp, *bp;
 	struct thread *td;
 
 	td = mycpu()->thread;
 	blkdevs[major(ROOT_DEV)].open(ROOT_DEV);
-	bp = bread(ROOT_DEV, SUPERBLKNO);
+	bp = bread(ROOT_DEV, SUPER_BLKNO);
 	cp = balloc();
 	if (td->error)
 		panic("iinit");
@@ -56,6 +58,7 @@ void iinit(void) {
 	brelease(bp);
 	mounts[0].buf = cp;
 	mounts[0].dev = ROOT_DEV;
+	return cp->addr;
 }
 
 /*

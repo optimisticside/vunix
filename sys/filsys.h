@@ -4,6 +4,8 @@
 #include "types.h"
 #include "param.h"
 
+#define SUPER_BLKNO	2	/* Block number of superblock */
+
 /*
  * Structure of an I-Node as it resides on the disk. Holds 10 zones, 8 of which
  * are direct pointers to blocks. The second to last one is an indirect pointer
@@ -40,5 +42,12 @@ struct superblock {
 	uint16_t blksz;		/* Block size (bytes) */
 	uint8_t diskver;	/* Disk version */
 };
+
+/*
+ * Gets the block number of the root I-Node.
+ */
+static inline size_t rootino(struct superblock *sb) {
+	return 3 + sb->impblks + sb->zmpblks;
+}
 
 #endif /* !_FILSYS_H_ */
