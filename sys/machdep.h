@@ -73,4 +73,12 @@ ARCH_REG_READ(ra);
 #define SATP_SV39 (8L << 60)
 #define MAKE_SATP(pagetable) (SATP_SV39 | (((uint64)pagetable) >> 12))
 
+/*
+ * Tells the CPU to wait for the next interrupt. This is used as a way to save
+ * power.
+ */
+static inline void pause(void) {
+	asm volatile ("wfi");
+}
+
 #endif /* !_MECHDEP_H_ */
