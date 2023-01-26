@@ -19,7 +19,7 @@ extern struct proc {
 	struct space *map;		/* Address space */
 	struct inode *cwd;		/* Current working directory */
 	struct file *ofile[NOFILE];	/* Open file handles */
-	struct spinlock *lock;		/* Lock for modifying process */
+	struct spinlock lock;		/* Lock for modifying process */
 } procs[NPROC];
 
 /*
@@ -41,7 +41,7 @@ extern struct thread {
 	struct proc *proc;		/* Controlling process */
 	struct trapframe *tframe;	/* CPU state upon interrupt (for trampoline) */
 	struct context *ctx;		/* Where to switch() to to run thread */
-	struct spinlock *lock;		/* Lock for modifying thread */
+	struct spinlock lock;		/* Lock for modifying thread */
 } threads[NTHREAD];
 
 enum { TD_NONE, TD_READY, TD_SLEEP, TD_RUN };

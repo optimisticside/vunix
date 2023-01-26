@@ -8,7 +8,7 @@
  * node in the file system, whether that be a directory, file, or some device.
  */
 struct inode {
-	struct spinlock *lock;	/* Spin lock */
+	struct spinlock lock;	/* Spin lock */
 	int flags;		/* Additional flags */
 	char count;		/* Reference count */
 	int dev;		/* Device number */

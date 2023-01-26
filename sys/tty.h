@@ -21,7 +21,7 @@ struct sgttyb {
  * block, the block would be all zeros except its last byte.
  */
 struct cblock {
-	struct spinlock *lock;	/* Spin lock */
+	struct spinlock lock;	/* Spin lock */
 	struct cblock *next;	/* Next entry in character list */
 	char chars[CBLKSIZ];	/* Data */
 	size_t size;		/* Size of data (to save time) */
@@ -36,7 +36,7 @@ struct cblock {
  * You can think of these as the character-device equivalent of buffers.
  */
 extern struct tty {
-	struct spinlock *lock;	/* Spin lock */
+	struct spinlock lock;	/* Spin lock */
 	struct cblock rawq;	/* Input characters from device */
 	struct cblock canq;	/* Input characters afer erase+kill */
 	struct cblock outq;	/* Output queue to device */

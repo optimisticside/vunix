@@ -9,7 +9,7 @@
  * file-system hierarchy (virtual file-system).
  */
 extern struct mount {
-	struct spinlock *lock;	/* Spin lock */
+	struct spinlock lock;	/* Spin lock */
 	struct inode *inode;	/* Mounted I-Node */
 	struct buf *buf;	/* Pointer to superblock */
 	int dev;		/* Device mounted */
