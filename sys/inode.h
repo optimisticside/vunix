@@ -19,7 +19,7 @@ extern struct inode {
 	int uid;		/* Owner */
 	int gid;		/* Group of owner */
 	size_t size;		/* Size of file */
-} inode[NINODE];
+} inodes[NINODE];
 
 /* Flag defenitions */
 #define I_LOCK	1		/* Locked */
