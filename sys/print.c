@@ -20,7 +20,7 @@ static void printn(size_t num, int base) {
 
 	if ((quot = num / base) != 0)
 		printn(quot, base);
-	putchar(*("0123456789ABCDEF" + (n % b)));
+	putchar(*("0123456789ABCDEF" + (num % base)));
 }
 
 /*
