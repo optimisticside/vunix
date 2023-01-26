@@ -40,8 +40,8 @@ void iinit(void) {
 	struct thread *td;
 
 	td = mycpu()->thread;
-	blkdevs[major(rootdev)].open(rootdev);
-	bp = bread(rootdev, SUPERBLKNO);
+	blkdevs[major(ROOT_DEV)].open(ROOT_DEV);
+	bp = bread(ROOT_DEV, SUPERBLKNO);
 	cp = balloc();
 	if (td->error)
 		panic("iinit");

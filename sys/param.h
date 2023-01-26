@@ -43,7 +43,7 @@
 /*
  * I/O related constants.
  */
-#define ROOTDEV		0	/* Boot disk */
-#define CONSDEV		0	/* Console */
+#define ROOT_DEV	0	/* Boot disk */
+#define CONS_DEV	0	/* Console */
 
 #endif /* !_PARAM_H_ */
