@@ -25,7 +25,7 @@ extern struct chrdev {
 extern struct blkdev {
 	int (*open)(int);		/* Close a device */
 	int (*close)(int);		/* Open a device */
-	int (*strat)(int, struct buf *);/* I/O operation (used for reading and writing */
+	int (*strat)(struct buf *);	/* I/O operation (used for reading and writing */
 } blkdevs[NBLKDEV];
 
 #endif /* !_CONF_H_ */
