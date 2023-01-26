@@ -1,5 +1,6 @@
 #include "types.h"
 #include "param.h"
+#include "filsys.h"
 #include "inode.h"
 #include "mount.h"
 #include "conf.h"
@@ -29,7 +30,7 @@ struct inode *iget(int dev, size_t ino) {
 						if (mp->inode == ip) {
 							release(&ip->lock);
 							dev = mp->dev;
-							ino = ROOTINO;
+							ino = rootino(mp->buf->addr);
 							goto loop;
 						}
 					}
