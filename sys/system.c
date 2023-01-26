@@ -8,6 +8,10 @@
 #include "proc.h"
 #include "tty.h"
 
+/*
+ * System table defenitions. These are tables usually defined in the header
+ * files corresponding to their respective structures.
+ */
 struct buf bufs[NBUF];
 struct cblock cblocks[NCBLOCK];
 struct cpu cpus[NCPU];
