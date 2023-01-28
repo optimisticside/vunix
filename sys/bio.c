@@ -38,31 +38,37 @@ static struct buf *getblk(int dev, size_t blkno, int size) {
 
 	if (major(dev) < NBLKDEV)
 		panic("blkdev");
-	for (;;) {
-		if ((dt = blkdevs[major(dev)].tab) == NULL)
-			panic("devtab");
-		for (bp = dt->head; bp != NULL; bp = bp->forw) {
-			if (bp->blkno != blkno || bp->dev != dev || bp->size != size)
-				continue;
-			if (bp->flags & B_LOCK) {
-				sleep(bp);
-				continue;
-			}
-			bp->flags |= B_LOCK;
+
+loop:
+	if ((dt = blkdevs[major(dev)].tab) == NULL)
+		panic("devtab");
+	for (bp = dt->head; bp != NULL; bp = bp->forw) {
+		acquire(&bp->lock);
+		if (bp->blkno != blkno || bp->dev != dev || bp->size != size)
+			goto loop;
+		if (bp->flags & B_LOCK) {
+			release(&bp->lock);
+			sleep(bp);
+			goto loop;
 		}
-		if ((bp = balloc()) == NULL) {
-			sleep(bfreelist);
-			continue;
-		}
-		if (bp->flags & B_DIRTY)
-			bwrite(bp);
-		bp->back->forw = bp->forw;
-		bp->forw->back = bp->back;
-		bp->dev = dev;
-		bp->blkno = blkno;
-		bp->size = size;
+		bp->flags |= B_LOCK;
+		release(&bp->lock);
 		return bp;
 	}
+	if ((bp = balloc()) == NULL) {
+		sleep(bfreelist);
+		goto loop;
+	}
+	acquire(&bp->lock);
+	if (bp->flags & B_DIRTY)
+		bwrite(bp);
+	bp->back->forw = bp->forw;
+	bp->forw->back = bp->back;
+	bp->dev = dev;
+	bp->blkno = blkno;
+	bp->size = size;
+	release(&bp->lock);
+	return bp;
 }
 
 /*
