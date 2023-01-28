@@ -66,7 +66,7 @@ retry:
 			release(&rp->lock);
 			goto retry;
 		}
-		if (rp->state == P_FREE && p == NULL)
+		if (rp->state == P_NONE && p == NULL)
 			p = rp;
 		else
 			release(&rp->lock);
