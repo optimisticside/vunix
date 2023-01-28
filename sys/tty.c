@@ -5,7 +5,32 @@
 #include "conf.h"
 #include "tty.h"
 
-struct cblock cbfreelist[];
+struct {
+	struct spinlock lock;	/* Spin lock */
+	struct cblock *head;	/* First block in list */
+	struct cblock *tail;	/* Last block in list */
+} cbfreelist;
+
+/*
+ * Allocates a character block.
+ */
+struct cblock *cballoc(void) {
+	for (;;) {
+		acquire(&cbfreelist.lock);
+		if ((cb = &cbfreelist.head) == NULL) {
+			release(&cbfreelist.lock);
+			sleep(&cbfreelist);
+			continue;
+		}
+		acquire(&cb->lock);
+		cbfreelist.head = cb->next;
+		if (cb == cbfreelist.tail)
+			cbfreelist.tail = NULL;
+		release(&cbfreelist.lock);
+		release(&cb->lock);
+		return cb;
+	}
+}
 
 /*
  * Writes a character to a character list. Allocates queue-blocks if out of
@@ -14,11 +39,8 @@ struct cblock cbfreelist[];
 void putc(int c, struct cblock *cb) {
 	acquire(&cb->lock);
 	while (cb->size == CBLKSIZ) {
-		if (cb->next == NULL) {
-			while ((cb->next = cballoc())) {
-				sleep(cbfreelist);
-			}
-		}
+		if (cb->next == NULL)
+			cb->next = cballoc();
 		release(&cb->lock);
 		cb = cb->next;
 		acquire(&cb->lock);
