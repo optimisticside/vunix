@@ -37,6 +37,7 @@ extern struct thread {
 	int nice;			/* User defined bias in scheduling priority */
 	int cpu;			/* Calculated CPU usage */
 	int last;			/* Last time the thread ran */
+	int start;			/* Time the thread started running in this cycle */
 	int error;			/* Returned from syscall */
 	void *kstack;			/* Start of kernel stack */
 	struct proc *proc;		/* Controlling process */
