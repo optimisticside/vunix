@@ -17,44 +17,43 @@ struct inode *iget(int dev, size_t ino) {
 	struct buf *bp;
 
 	td = mycpu()->thread;
-	for (;;) {
-		for (ip = &inodes[0]; ip < &inodes[NINODE]; ip++) {
-			acquire(&ip->lock);
-			if (ip->dev == dev && ip->num == ino) {
-				if (ip->flags&I_LOCK) {
-					release(&ip->lock);
-					sleep(ip);
-					goto loop;
-				} else if (ip->flags&I_MOUNT) {
-					for (mp = &mounts[0]; mp < &mounts[NMOUNT]; mp++) {
-						if (mp->inode == ip) {
-							release(&ip->lock);
-							dev = mp->dev;
-							ino = rootino(mp->buf->addr);
-							goto loop;
-						}
+loop:
+	for (ip = &inodes[0]; ip < &inodes[NINODE]; ip++) {
+		acquire(&ip->lock);
+		if (ip->dev == dev && ip->num == ino) {
+			if (ip->flags&I_LOCK) {
+				release(&ip->lock);
+				sleep(ip);
+				goto loop;
+			} else if (ip->flags&I_MOUNT) {
+				for (mp = &mounts[0]; mp < &mounts[NMOUNT]; mp++) {
+					if (mp->inode == ip) {
+						release(&ip->lock);
+						dev = mp->dev;
+						ino = rootino(mp->buf->addr);
+						goto loop;
 					}
 				}
-				ip->count++;
-				ip->flags |= I_LOCK;
-				release(&ip->lock);
-				return ip;
 			}
-			if (oip == NULL && ip->count == 0)
-				oip = ip;
+			ip->count++;
+			ip->flags |= I_LOCK;
+			release(&ip->lock);
+			return ip;
 		}
-		if ((oip = ip) == NULL) {
-			printf("i-node buffer overflow\n");
-			td->error = ENFILE;
-			return NULL;
-		}
-		acquire(&ip->lock);
-		bp = bread(dev, itod(ino));
-		ip->flags &= I_LOCK;
-		ip->dev = dev;
-		ip->num = ino;
-		ip->count++;
-		release(&ip->lock);
-		return ip;
+		if (oip == NULL && ip->count == 0)
+			oip = ip;
 	}
+	if ((oip = ip) == NULL) {
+		printf("i-node buffer overflow\n");
+		td->error = ENFILE;
+		return NULL;
+	}
+	acquire(&ip->lock);
+	bp = bread(dev, itod(ino));
+	ip->flags &= I_LOCK;
+	ip->dev = dev;
+	ip->num = ino;
+	ip->count++;
+	release(&ip->lock);
+	return ip;
 }
