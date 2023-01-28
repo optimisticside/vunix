@@ -17,6 +17,27 @@
 int started = 0;
 
 /*
+ * I-Node initialization routine. Reads the root-device's superblock and
+ * initializes the current date from the last modified date.
+ */
+struct superblock *iinit(void) {
+	struct buf *cp, *bp;
+	struct thread *td;
+
+	td = mycpu()->thread;
+	blkdevs[major(ROOT_DEV)].open(ROOT_DEV);
+	bp = bread(ROOT_DEV, SUPER_BLKNO);
+	cp = balloc();
+	if (td->error)
+		panic("iinit");
+	memcpy(bp->addr, cp->addr, sizeof(struct superblock *));
+	brelease(bp);
+	mounts[0].buf = cp;
+	mounts[0].dev = ROOT_DEV;
+	return cp->addr;
+}
+
+/*
  * Main kernel initialization routine. This can be only called on one cpu.
  */
 void start(void) {
@@ -41,29 +62,8 @@ void start(void) {
 }
 
 /*
- * I-Node initialization routine. Reads the root-device's superblock and
- * initializes the current date from the last modified date.
- */
-struct superblock *iinit(void) {
-	struct buf *cp, *bp;
-	struct thread *td;
-
-	td = mycpu()->thread;
-	blkdevs[major(ROOT_DEV)].open(ROOT_DEV);
-	bp = bread(ROOT_DEV, SUPER_BLKNO);
-	cp = balloc();
-	if (td->error)
-		panic("iinit");
-	memcpy(bp->addr, cp->addr, sizeof(struct superblock *));
-	brelease(bp);
-	mounts[0].buf = cp;
-	mounts[0].dev = ROOT_DEV;
-	return cp->addr;
-}
-
-/*
  * Main entry point for kernel. Called by bootloader and other assembly code.
- * Hands contrl onto start() and ultimately the scheduler.
+ * Hands control onto start() and ultimately the scheduler. 
  */
 void main(void) {
 	if (cpuid() == 0)
