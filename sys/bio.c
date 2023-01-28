@@ -77,7 +77,7 @@ struct buf *bread(int dev, uint64_t blkno) {
 
 	size = blkdevs[major(dev)].blksz;
 	bp = getblk(dev, blkno, size);
-	if (bp->flags B_VALID)
+	if (bp->flags&B_DONE)
 		return bp;
 	bp->flags |= B_READ;
 	blkdevs[major(dev)].strat(bp);
