@@ -29,7 +29,7 @@ extern struct proc {
  */
 extern struct thread {
 	char state;			/* Current state */
-	uint16_t flags;			/* Additional flags */
+	int flags;			/* Additional flags */
 	int tid;			/* Unique identifier */
 	int sig;			/* Signal sent */
 	void *wchan;			/* Waiting channel */

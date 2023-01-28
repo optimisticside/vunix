@@ -35,13 +35,13 @@ typedef uint64_t vaddr_t;	/* Virtual address */
 #define PG_ROUNDDOWN(a) (((a)) & ~(PGSIZE-1))
 
 /* Shift a physical address to the right place for a PTE. */
-#define PA2PTE(pa) ((((uint64)pa) >> 12) << 10)
+#define PA2PTE(pa) ((((uint64_t)pa) >> 12) << 10)
 #define PTE2PA(pte) (((pte) >> 10) << 12)
 #define PTE_FLAGS(pte) ((pte) & 0x3FF)
 
 /* Extract the three 9-bit page table indices from a virtual address. */
 #define PX_MASK 0x1FF /* 9 bits */
 #define PX_SHIFT(level) (PGSHIFT+(9*(level)))
-#define PX(level, va) ((((uint64) (va)) >> PXSHIFT(level)) & PXMASK)
+#define PX(level, va) ((((uint64_t) (va)) >> PXSHIFT(level)) & PXMASK)
 
 #endif /* !_PMAP_H_ */
