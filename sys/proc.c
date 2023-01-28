@@ -15,12 +15,14 @@
  */
 void sleep(void *wchan) {
 	struct thread *td, *curtd;
+	struct cpu *c;
 	int pos;
 
 	pos = 0;
-	curtd = mycpu()->thread;
+	cpu = mycpu();
+	curtd = c->thread;
 	acquire(&curtd->lock);
-	for (td = &threads[0]; td < &threads[NTHREADS]; td++) {
+	for (td = &threads[0]; td < &threads[NTHREAD]; td++) {
 		if (td == curtd)
 			continue;
 		acquire(&td->lock);
@@ -35,7 +37,7 @@ void sleep(void *wchan) {
 	 * swtch() will return once our context is restored, which usually
 	 * when someone issues a wakeup on the channel we are sleeping on.
 	 */
-	swtch(&cpu->sched, &curtd->ctx);
+	swtch(&c->sched, curtd->ctx);
 	release(&curtd->lock);
 }
 
@@ -53,12 +55,12 @@ retry:
 		acquire(&rp->lock);
 		if (rp->pid == mpid) {
 			release(&rp->lock);
-			goto retry
+			goto retry;
 		}
 		if (rp->state == P_FREE && p == NULL)
 			p = rp;
 		else
-			relase(&rp->lock);
+			release(&rp->lock);
 	}
 	p->pid = mpid;
 	p->state = P_EMBRYO;
@@ -72,7 +74,7 @@ retry:
 void wakeup(void *wchan) {
 	struct thread *td;
 	
-	for (td = &threads[0]; td < &threads[NTHREADS]; td++) {
+	for (td = &threads[0]; td < &threads[NTHREAD]; td++) {
 		if (td->state == TD_SLEEP && td->wchan == wchan)
 			setrun(td);
 	}
@@ -86,10 +88,10 @@ void wakeupn(void *wchan, int n) {
 	struct thread *td, *choice;
 
 	for (; n > 0; n--) {
-		for (td = &threads[0]; td < &threads[NTHREADS]; td++) {
+		for (td = &threads[0]; td < &threads[NTHREAD]; td++) {
 			acquire(&td->lock);
 			if (td->state == TD_SLEEP && td->wchan == wchan
-				&& (choice == NULL || td->wqpos < choice->wqpos)
+				&& (choice == NULL || td->wqpos < choice->wqpos))
 				choice = td;
 			release(&td->lock);
 		}
@@ -116,7 +118,7 @@ void wakeupn(void *wchan, int n) {
  * other priority-related data.
  */
 static int getpri(struct thread *td) {
-	return td->usage * (tick() - td->start);
+	return td->cpu * (tick() - td->start);
 }
 
 /*
@@ -124,7 +126,7 @@ static int getpri(struct thread *td) {
  * resides.
  */
 static struct thread *nexttd(void) {
-	struct thread *td, res;
+	struct thread *td, *res;
 	struct cpu *c;
 	int usage;
 
@@ -169,13 +171,13 @@ void scheduler(void) {
 		acquire(&td->lock);
 		c->thread = td;
 		vmswitch(td->proc->map);
-		td->state = TD_RUNNING;
+		td->state = TD_RUN;
 
 		/*
 		 * swtch() will return when the scheduler's context is restored
 		 * by some other kernel code.
 		 */
-		swtch(&c->ctx, &p->ctx);
+		swtch(&c->sched, td->ctx);
 		vmswitch(kernmap);
 		td->state = TD_READY;
 		release(&td->lock);
