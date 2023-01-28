@@ -13,6 +13,30 @@ struct {
 } bfreelist;
 
 /*
+ * Retrieves an empty buffer.
+ */
+struct buf *geteblk(void) {
+	struct buf *bp;
+
+	for (;;) {
+		acquire(&bfreelist.lock);
+		if ((bp = bfreelist.head) == NULL)
+			continue;
+		acquire(&bp->lock);
+		release(&bfreelist.lock);
+		if (bp->flags&B_DIRTY) {
+			bp->flags |= B_ASYNC;
+			bwrite(bp);
+			release(&bp->lock);
+			goto loop;
+		}
+		bp->flags |= B_LOCK;
+		release(&bp->lock);
+		return bp;
+	}
+}
+
+/*
  * Pick up the device's error number and pass it to the user. If there is an
  * error but the number is 0 set a generalized code. Actually the latter is
  * always true because devices don't yet return specific errors.
@@ -75,6 +99,7 @@ loop:
 		release(&bp->lock);
 		goto loop;
 	}
+	bp->flags |= B_LOCK;
 	bp->back->forw = bp->forw;
 	bp->forw->back = bp->back;
 	bp->dev = dev;
