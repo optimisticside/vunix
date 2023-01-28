@@ -55,4 +55,6 @@ static inline struct cpu *mycpu() {
 	return &cpus[rd_mhartid()];
 }
 
+void swtch(struct context *old, struct context *new);
+
 #endif /* !_CPU_H_ */
