@@ -48,6 +48,8 @@ extern struct thread {
 enum { TD_NONE, TD_READY, TD_SLEEP, TD_RUN };
 enum { P_NONE, P_EMBRYO, P_ALIVE, P_DEAD, P_ZOMBIE };
 
+struct proc *palloc(void);
+struct thread *tdalloc(void);
 void sched(void);
 void scheduler(void);
 void sleep(void *wchan);
