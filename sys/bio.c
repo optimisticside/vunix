@@ -23,6 +23,10 @@ struct buf *geteblk(void) {
 		if ((bp = bfreelist.head) == NULL)
 			continue;
 		acquire(&bp->lock);
+		bfreelist.head = bp->forw;
+		bp->forw = NULL;
+		if (bp == &bfreelist.tail)
+			bpfreelist.tail = NULL;
 		release(&bfreelist.lock);
 		if (bp->flags&B_DIRTY) {
 			bp->flags |= B_ASYNC;
@@ -92,6 +96,10 @@ loop:
 		goto loop;
 	}
 	acquire(&bp->lock);
+	bfreelist.head = bp->forw;
+	bp->forw = NULL;
+	if (bp == bfreelist.tail)
+		bfreelist.tail = NULL;
 	release(&bfreelist.lock);
 	if (bp->flags & B_DIRTY) {
 		bp->flags |= B_ASYNC;
@@ -100,8 +108,6 @@ loop:
 		goto loop;
 	}
 	bp->flags |= B_LOCK;
-	bp->back->forw = bp->forw;
-	bp->forw->back = bp->back;
 	bp->dev = dev;
 	bp->blkno = blkno;
 	bp->size = size;
