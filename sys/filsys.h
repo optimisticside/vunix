@@ -50,4 +50,11 @@ static inline size_t rootino(struct superblock *sb) {
 	return 3 + sb->impblks + sb->zmpblks;
 }
 
+/*
+ * Get a block-number frmo an I-Node number.
+ */
+static inline size_t itod(struct superblock *sb, size_t ino) {
+	return rootino(sb) + ino;
+}
+
 #endif /* !_FILSYS_H_ */
