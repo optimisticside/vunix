@@ -6,6 +6,12 @@
 #include "buf.h"
 #include "cpu.h"
 
+struct {
+	struct spinlock lock;	/* Spin lock */
+	struct buf *head;	/* First buffer in list */
+	struct buf *tail;	/* Last buffer in list */
+} bfreelist;
+
 /*
  * Pick up the device's error number and pass it to the user. If there is an
  * error but the number is 0 set a generalized code. Actually the latter is
@@ -55,13 +61,20 @@ loop:
 		release(&bp->lock);
 		return bp;
 	}
-	if ((bp = balloc()) == NULL) {
+	acquire(&bfreelist.lock);
+	if ((bp = bfreelist.head) == NULL) {
+		release(&bfreelist.lock);
 		sleep(bfreelist);
 		goto loop;
 	}
 	acquire(&bp->lock);
-	if (bp->flags & B_DIRTY)
+	release(&bfreelist.lock);
+	if (bp->flags & B_DIRTY) {
+		bp->flags |= B_ASYNC;
 		bwrite(bp);
+		release(&bp->lock);
+		goto loop;
+	}
 	bp->back->forw = bp->forw;
 	bp->forw->back = bp->back;
 	bp->dev = dev;
