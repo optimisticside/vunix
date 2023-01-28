@@ -19,7 +19,7 @@ void sleep(void *wchan) {
 	int pos;
 
 	pos = 0;
-	cpu = mycpu();
+	c = mycpu();
 	curtd = c->thread;
 	acquire(&curtd->lock);
 	for (td = &threads[0]; td < &threads[NTHREAD]; td++) {
