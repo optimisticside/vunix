@@ -77,13 +77,13 @@ ARCH_REG_READ(ra);
  * Memory-mapped I/O routines.
  */
 #define mmiordb(addr)		*((volatile uint8_t *)(addr))
-#define mmiordw(addr		*((volatile uint16_t *)(addr))
+#define mmiordw(addr)		*((volatile uint16_t *)(addr))
 #define mmiordl(addr)		*((volatile uint32_t *)(addr))
 #define mmiordq(addr)		*((volatile uint64_t *)(addr))
 #define mmiowrb(addr, val)	(*((volatile uint8_t *)(addr)) = val)
 #define mmiowrd(addr, val)	(*((volatile uint16_t *)(addr)) = val)
-#define mmiordl(addr, val)	(*((volatile uint32_t *)(addr)) = val)
-#define mmiordq(addr, val)	(*((volatile uint64_t *)(addr)) = val)
+#define mmiowrl(addr, val)	(*((volatile uint32_t *)(addr)) = val)
+#define mmiowrq(addr, val)	(*((volatile uint64_t *)(addr)) = val)
 
 /*
  * Tells the CPU to wait for the next interrupt. This is used as a way to save
