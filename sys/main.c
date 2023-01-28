@@ -27,7 +27,7 @@ struct superblock *iinit(void) {
 	td = mycpu()->thread;
 	blkdevs[major(ROOT_DEV)].open(ROOT_DEV);
 	bp = bread(ROOT_DEV, SUPER_BLKNO);
-	cp = balloc();
+	cp = geteblk();
 	if (td->error)
 		panic("iinit");
 	memcpy(bp->addr, cp->addr, sizeof(struct superblock *));
