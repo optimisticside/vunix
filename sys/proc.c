@@ -7,6 +7,15 @@
 #include "vm.h"
 
 /*
+ * Sets the given thread to be placed on the run-queue.
+ */
+void setrun(struct thread *td) {
+	acquire(&td->lock);
+	td->state = TD_READY;
+	release(&td->lock);
+}
+
+/*
  * Puts the current thread to sleep. The waiting channel is any arbitrary
  * 64-bit integer or pointer, that will be stored in the thread structure. If
  * the thread is to be awaken, the same waiting channel must be provided.
