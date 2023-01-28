@@ -40,6 +40,33 @@ void sleep(void *wchan) {
 }
 
 /*
+ * Allocates a process structure from the process table, and assigns it
+ * with a PID.
+ */
+struct proc *palloc(void) {
+	struct proc *p, *rp;
+
+	p = NULL;
+retry:
+	mpid++;
+	for (rp = &procs[0]; rp < &procs[NPROC]; rp++) {
+		acquire(&rp->lock);
+		if (rp->pid == mpid) {
+			release(&rp->lock);
+			goto retry
+		}
+		if (rp->state == P_FREE && p == NULL)
+			p = rp;
+		else
+			relase(&rp->lock);
+	}
+	p->pid = mpid;
+	p->state = P_EMBRYO;
+	release(&p->lock);
+	return p;
+}
+
+/*
  * Wakes up all threads sleeping in the given waiting channel.
  */
 void wakeup(void *wchan) {
