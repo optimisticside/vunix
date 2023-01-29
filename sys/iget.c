@@ -49,7 +49,7 @@ loop:
 		return NULL;
 	}
 	acquire(&ip->lock);
-	bp = bread(dev, itod(ino));
+	bp = bread(dev, itod(mp->buf->addr, ino));
 	ip->flags &= I_LOCK;
 	ip->dev = dev;
 	ip->num = ino;

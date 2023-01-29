@@ -66,7 +66,7 @@ void start(void) {
  * Hands control onto start() and ultimately the scheduler. 
  */
 void main(void) {
-	if (cpuid() == 0)
+	if (rd_mhartid() == 0)
 		start();
 	while (!started)
 		continue;

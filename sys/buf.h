@@ -53,7 +53,6 @@ void binit(void);
 struct buf *bread(int dev, size_t blkno);
 void brelease(struct buf *bp);
 void bwrite(struct buf *bp);
-struct buf *getblk(void);
 struct buf *geteblk(void);
 
 #endif /* !_BUF_H_ */

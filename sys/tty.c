@@ -15,9 +15,11 @@ struct {
  * Allocates a character block.
  */
 struct cblock *cballoc(void) {
+	struct cblock *cb;
+
 	for (;;) {
 		acquire(&cbfreelist.lock);
-		if ((cb = &cbfreelist.head) == NULL) {
+		if ((cb = cbfreelist.head) == NULL) {
 			release(&cbfreelist.lock);
 			sleep(&cbfreelist);
 			continue;
