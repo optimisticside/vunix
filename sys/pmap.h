@@ -44,6 +44,15 @@ typedef uint64_t vaddr_t;	/* Virtual address */
 #define PX_SHIFT(level) (PGSHIFT+(9*(level)))
 #define PX(level, va) ((((uint64_t) (va)) >> PXSHIFT(level)) & PXMASK)
 
+/*
+ * A page-map represents an address space that can be used by processes, and
+ * the kernel.
+ */
+extern struct pmap {
+	pde_t map;	/* Pointer to actual page-map */
+	int ref;	/* Reference count */
+} *kernmap;
+
 void pmswitch(struct pmap *map);
 struct pmap *pmalloc(void);
 
