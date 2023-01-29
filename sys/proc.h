@@ -17,7 +17,7 @@ extern struct proc {
 	char name[NNAME];		/* Name (for debugging purposes) */
 	struct proc *parent;		/* Parent process (if applicable) */
 	struct tty *tty;		/* Controlling teletype */
-	struct space *map;		/* Address space */
+	struct pmap *map;		/* Address space */
 	struct inode *cwd;		/* Current working directory */
 	struct file *ofile[NOFILE];	/* Open file handles */
 	struct spinlock lock;		/* Lock for modifying process */

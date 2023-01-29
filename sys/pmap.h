@@ -44,4 +44,7 @@ typedef uint64_t vaddr_t;	/* Virtual address */
 #define PX_SHIFT(level) (PGSHIFT+(9*(level)))
 #define PX(level, va) ((((uint64_t) (va)) >> PXSHIFT(level)) & PXMASK)
 
+void pmswitch(struct pmap *map);
+struct pmap *pmalloc(void);
+
 #endif /* !_PMAP_H_ */

@@ -1,10 +1,10 @@
 #include "types.h"
 #include "param.h"
 #include "clock.h"
+#include "pmap.h"
 #include "lock.h"
 #include "proc.h"
 #include "cpu.h"
-#include "vm.h"
 
 /*
  * Counters for process and thread ID numbers.
@@ -185,7 +185,7 @@ void scheduler(void) {
 			pause();
 		acquire(&td->lock);
 		c->thread = td;
-		vmswitch(td->proc->map);
+		pmswitch(td->proc->map);
 		td->state = TD_RUN;
 
 		/*
@@ -193,7 +193,7 @@ void scheduler(void) {
 		 * by some other kernel code.
 		 */
 		swtch(&c->sched, td->ctx);
-		vmswitch(kernmap);
+		pmswitch(kernmap);
 		td->state = TD_READY;
 		release(&td->lock);
 	}
