@@ -4,7 +4,7 @@
 
 void *memcpy(char *to, char *from, size_t count) {
 	do
-		*to++ = *from++
+		*to++ = *from++;
 	while (--count);
 	return to;
 }
