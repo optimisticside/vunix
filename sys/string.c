@@ -11,7 +11,7 @@ void *memcpy(char *to, char *from, size_t count) {
 
 void *memset(char *ptr, int val, size_t count) {
 	do
-		*to++ = val;
+		*ptr++ = val;
 	while (--count);
-	return to;
+	return ptr;
 }

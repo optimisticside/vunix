@@ -1,5 +1,6 @@
 #include "types.h"
 #include "param.h"
+#include "string.h"
 #include "filsys.h"
 #include "inode.h"
 #include "mount.h"

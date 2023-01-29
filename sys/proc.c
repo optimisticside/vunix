@@ -1,10 +1,16 @@
 #include "types.h"
 #include "param.h"
+#include "clock.h"
 #include "lock.h"
-#include "time.h"
 #include "proc.h"
 #include "cpu.h"
 #include "vm.h"
+
+/*
+ * Counters for process and thread ID numbers.
+ */
+int mpid;
+int mtid;
 
 /*
  * Sets the given thread to be placed on the run-queue.
