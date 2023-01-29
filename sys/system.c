@@ -3,6 +3,7 @@
 
 #include "buf.h"
 #include "cpu.h"
+#include "conf.h"
 #include "inode.h"
 #include "mount.h"
 #include "proc.h"
