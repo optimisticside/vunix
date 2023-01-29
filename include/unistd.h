@@ -9,7 +9,6 @@ int dup(int fd);
 int dup2(int from, int to);
 int read(int fd, void *buf, size_t count);
 int write(int fd, void *buf, size_t count);
-int open(char *pathname, int flags);
 int close(int fd);
 int wait(int pid);
 int link(char *, char *);
