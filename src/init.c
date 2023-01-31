@@ -7,10 +7,34 @@
 char *dargv[] = { 0 };
 
 /*
- * Path buffer for reading the paths of daemons' initialization files.
+ * Helper routine that goes through a file and calls a function for each line.
  */
-#define NPBUF 64
-char pbuf[64] = { 0 };
+void rdlines(int fd, void (*func)(char *)) {
+	char *bp;
+
+	for (;;) {
+		for (bp = &buf[0]; bp < &buf[buflen] && *bp != '\0'; bp++) {
+			if (read(fd, bp, 1) == '\n')
+				break;
+		}
+		if (bp != '\n' || bp != '\0')
+			return die("File line-buffer overflow");
+		buf[bp++] = '\0';
+		func(buf);
+	}
+}
+
+/*
+ * Starts a daemon.
+ */
+void start(char *daemon) {
+	if (fork() > 0)
+		printf("Starting %s\n", daemon);
+	else {
+		close(3);
+		execl(daemon, dargv);
+	}
+}
 
 /*
  * Main system initialialization routine.
@@ -44,18 +68,5 @@ int main(int argc, char *argv[]) {
 	 */
 	if ((initfd = open("/etc/init", O_RDONLY)) < 0)
 		return printf("No daemons found");
-	for (;;) {
-		for (pb = &hbuf[0]; pb < &pbuf[NPBUF] && *pb != '\0'; pb++) {
-			if (read(initfd, pb, 1) == '\n')
-				break;
-		}
-		if (bp != '\n' || pb != '\0')
-			return printf("Path buffer overflow");
-		patbuf[pb++] = '\0';
-		if (fork() == 0) {
-			close(initfd);
-			exec(pathbuf, dargv);
-		} else
-			printf("Starting %s\n");
-	}
+	rdlines(initfd, start);
 }
