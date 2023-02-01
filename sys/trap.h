@@ -1,6 +1,9 @@
 #ifndef _TRAP_H_
 #define _TRAP_H_
 
+/*
+ * Exception code defenitions.
+ */
 #define T_INSTRADM	0	/* Instruction address misaligned */
 #define T_IACCFLT	1	/* Instruction access fault */
 #define T_ILLINST	2	/* Illegal instruction */
