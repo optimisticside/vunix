@@ -68,3 +68,21 @@ int getc(struct cblock *cb) {
 	release(&cb->lock);
 	return c;
 }
+
+/*
+ * Initialize all character-blocks.
+ */
+void cbinit(void) {
+	struct cblock *cb;
+
+	acquire(&cbfreelist.lock);
+	for (cb = &cblocks[0]; cb < &cblocks[NCBLOCK]; cb++) {
+		acquire(&cb->lock);
+		cb->next = cbfreelist.head;
+		if (cbfreelist.tail == NULL)
+			cbfreelist.tail = cb;
+		cbfreelist.head = cb;
+		release(&cb->lock);
+	}
+	release(&cbfreelist.lock);
+}

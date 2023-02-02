@@ -150,3 +150,23 @@ void bwrite(struct buf *bp) {
 	} else if (flags & B_DELWRI == 0)
 		geterror(bp);
 }
+
+/*
+ * Initialize all buffers. The only thing that needs to be done is moving them
+ * all to the freelist. No locks are needed since this runs on one CPU only,
+ * but are still used for good measure.
+ */
+void binit(void) {
+	struct buf *bp;
+
+	acquire(&bfreelist.lock);
+	for (bp = &bufs[0]; bp < &bufs[NBUF]; bp++) {
+		acquire(&bp->lock);
+		bp->next = bfreelist.head;
+		if (bfreelist.tail == NULL)
+			bfreelist.tail = bp;
+		bfreelist.head = bp;
+		release(&bp->lock);
+	}
+	release(&bfreelist.lock);
+}
