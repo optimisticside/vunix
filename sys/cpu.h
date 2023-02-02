@@ -52,7 +52,7 @@ extern struct cpu {
  * Retrieves the current CPU structure representing the current CPU.
  */
 static inline struct cpu *mycpu() {
-	return &cpus[rd_mhartid()];
+	return &cpus[cpuid()];
 }
 
 void swtch(struct context *old, struct context *new);

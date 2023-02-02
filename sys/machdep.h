@@ -50,4 +50,11 @@ static inline void pause(void) {
 	asm volatile ("wfi");
 }
 
+/*
+ * Helper routine to get a unique identifier for a CPU.
+ */
+static inline int cpuid(void) {
+	return rdcsr(mhartid);
+}
+
 #endif /* !_MECHDEP_H_ */
