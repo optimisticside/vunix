@@ -3,75 +3,21 @@
 
 #include "types.h"
 
-#define ARCH_SREG_READ(instr)				\
-static inline uint64_t rd_##instr() {			\
-	uint64_t x;					\
-	asm volatile ("csrr %0, " #instr : "=r" (x));	\
-	return x;					\
-}
-
-#define ARCH_SREG_WRITE(instr)					\
-static inline void wr_##instr(uint64_t x) {			\
-	asm volatile ("csrw " #instr ", %0" : : "r" (x));	\
-}
-
-#define ARCH_REG_READ(reg)				\
-static inline uint64_t rd_##reg() {			\
-	uint64_t x;					\
-	asm volatile ("mv %0, " #reg : "=r" (x));	\
-	return x;					\
-}
-
-#define ARCH_REG_WRITE(reg)				\
-static inline void wr_##reg(uint64_t x) {		\
-	asm volatile ("mv " #reg ", %0" : : "r"(x));	\
-}
-
-#define ARCH_SREG_RW(instr) ARCH_SREG_READ(instr) ARCH_SREG_WRITE(instr)
-#define ARCH_REG_RW(reg) ARCH_REG_READ(reg) ARCH_REG_WRITE(reg)
-
-ARCH_SREG_READ(mhartid);
-ARCH_SREG_RW(mstatus);
-ARCH_SREG_RW(sstatus);
-ARCH_SREG_RW(sip);
-ARCH_SREG_RW(sie);
-ARCH_SREG_RW(mie);
-ARCH_SREG_RW(sepc);
-ARCH_SREG_RW(mideleg);
-ARCH_SREG_RW(medeleg);
-ARCH_SREG_RW(stvec);
-ARCH_SREG_RW(mtvec);
-ARCH_SREG_WRITE(pmpcfg0);
-ARCH_SREG_WRITE(pmpaddr0);
-ARCH_SREG_RW(satp);
-ARCH_SREG_RW(mscratch);
-ARCH_SREG_READ(scause);
-ARCH_SREG_READ(stval);
-ARCH_SREG_RW(mcounteren);
-ARCH_SREG_READ(time);
-
-ARCH_REG_RW(sp);
-ARCH_REG_RW(tp);
-ARCH_REG_READ(ra);
-
-#define MSTATUS_MPP_MASK (3L << 11) /* Previous mode */
-#define MSTATUS_MPP_M (3L << 11)
-#define MSTATUS_MPP_S (1L << 11)
-#define MSTATUS_MPP_U (0L << 11)
-#define MSTATUS_MIE (1L << 3)    /* Machine-mode interrupt enable */
-
-/* Supervisor Interrupt Enable */
-#define SIE_SEIE (1L << 9) /* External */
-#define SIE_STIE (1L << 5) /* Timer */
-#define SIE_SSIE (1L << 1) /* Software */
-
-/* Machine-mode Interrupt Enable */
-#define MIE_MEIE (1L << 11) /* External */
-#define MIE_MTIE (1L << 7)  /* Timer */
-#define MIE_MSIE (1L << 3)  /* Software */
-
-#define SATP_SV39 (8L << 60)
-#define MAKE_SATP(pagetable) (SATP_SV39 | (((uint64)pagetable) >> 12))
+#define	SCAUSE_INTR			(1ul << 63)
+#define	SCAUSE_CODE			(~SCAUSE_INTR)
+#define	SCAUSE_INST_MISALIGNED		0
+#define	SCAUSE_INST_ACCESS_FAULT	1
+#define	SCAUSE_ILLEGAL_INSTRUCTION	2
+#define	SCAUSE_BREAKPOINT		3
+#define	SCAUSE_LOAD_MISALIGNED		4
+#define	SCAUSE_LOAD_ACCESS_FAULT	5
+#define	SCAUSE_STORE_MISALIGNED		6
+#define	SCAUSE_STORE_ACCESS_FAULT	7
+#define	SCAUSE_ECALL_USER		8
+#define	SCAUSE_ECALL_SUPERVISOR		9
+#define	SCAUSE_INST_PAGE_FAULT		12
+#define	SCAUSE_LOAD_PAGE_FAULT		13
+#define	SCAUSE_STORE_PAGE_FAULT		15
 
 /*
  * Memory-mapped I/O routines.
@@ -84,6 +30,17 @@ ARCH_REG_READ(ra);
 #define mmiowrd(addr, val)	(*((volatile uint16_t *)(addr)) = val)
 #define mmiowrl(addr, val)	(*((volatile uint32_t *)(addr)) = val)
 #define mmiowrq(addr, val)	(*((volatile uint64_t *)(addr)) = val)
+
+/*
+ * Control and status register operations. Originally these were macros that
+ * generated functions.
+ */
+#define wrcsr(csr, val) asm volatile ("csrw " #csr ", %0", :: "r" (val))
+#define rdcsr(csr) ({					\
+	uint64_t val;					\
+	asm volatile ("csrr %0, " #csr : "=r" (x));	\
+	val						\
+})
 
 /*
  * Tells the CPU to wait for the next interrupt. This is used as a way to save
