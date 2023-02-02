@@ -38,8 +38,8 @@
 #define wrcsr(csr, val) asm volatile ("csrw " #csr ", %0", :: "r" (val))
 #define rdcsr(csr) ({					\
 	uint64_t val;					\
-	asm volatile ("csrr %0, " #csr : "=r" (x));	\
-	val						\
+	asm volatile ("csrr %0, " #csr : "=r" (val));	\
+	val;						\
 })
 
 /*

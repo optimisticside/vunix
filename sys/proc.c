@@ -47,7 +47,7 @@ void sleep(void *wchan) {
 	}
 	curtd->state = TD_SLEEP;
 	curtd->wchan = wchan;
-	curtd->wpos = pos;
+	curtd->wqpos = pos;
 
 	/*
 	 * swtch() will return once our context is restored, which usually

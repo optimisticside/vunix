@@ -37,6 +37,7 @@ struct trapframe {
 		 s6, s7, s8, s9, s10, s11;	/* Callee saved registers */
 	uint64_t a0, a1, a2, a3, a4, a5, a6, a7;/* Function arguments */
 	uint64_t t3, t4, t5;			/* Temprary registers (cont) */
+	uint64_t sepc, sstatus, stavl, scause;	/* Other registers */
 };
 
 /*

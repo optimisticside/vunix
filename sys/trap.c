@@ -4,6 +4,7 @@
 #include "trap.h"
 #include "lock.h"
 #include "cpu.h"
+#include "sig.h"
 
 /*
  * User-mode trap handler. Called for all exceptions originating from processes
@@ -33,7 +34,7 @@ int utrap(struct trapframe *tf) {
 		signo = SIGBUS;
 		icode = BUS_ADRALN;
 	default:
-		printf("%d:%d - Unknown userland exception %x at %x"
-			p->pid, td->tid, excp, td->pc);	break;
+		printf("%d:%d - Unknown userland exception %x at %x",
+			p->pid, td->tid, excp, tf->tp);	break;
 	}
 }
