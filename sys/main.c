@@ -52,7 +52,7 @@ void start(void) {
 	td->state = TD_RUN;
 	mycpu()->thread = td;
 
-	cinit();
+	cbinit();
 	binit();
 	sb = iinit();
 
