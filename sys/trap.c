@@ -33,6 +33,16 @@ int utrap(struct trapframe *tf) {
 	case SCAUSE_INST_MISALIGNED:
 		signo = SIGBUS;
 		icode = BUS_ADRALN;
+		break;
+	case SCAUSE_ILLEGAL_INSTRUCTION:
+		/* TODO: Reset FPU state */
+		signo = SIGILL;
+		icode = ILL_ILLTRP;
+		break;
+	case SCAUSE_BREAKPOINT:
+		signo = SIGTRAP;
+		icode = TRAP_BRKPT;
+		break;
 	default:
 		printf("%d:%d - Unknown userland exception %x at %x",
 			p->pid, td->tid, excp, tf->tp);	break;
