@@ -49,8 +49,10 @@ typedef uint64_t vaddr_t;	/* Virtual address */
  * the kernel.
  */
 extern struct pmap {
-	pde_t map;	/* Pointer to actual page-map */
-	int ref;	/* Reference count */
+	struct spinlock lock;	/* Spin lock */
+	pde_t top;		/* Top-level page table */
+	int cpus;		/* CPUs currently active */
+	size_t satp;		/* Value of SATP register */
 } *kernmap;
 
 void pmswitch(struct pmap *map);
