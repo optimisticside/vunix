@@ -24,6 +24,7 @@ int chown(char *path, int uid, int gid);
 int chroot(char *path);
 int brk(void *ptr);
 void *sbrk(size_t inc);
+int fsync(int fd);
 int stat(char *path, struct stat *st);
 int fstat(int fd, struct stat *st);
 int seek(int fd, size_t off, int whence);
