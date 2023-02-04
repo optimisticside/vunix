@@ -78,7 +78,7 @@ void cbinit(void) {
 	acquire(&cbfreelist.lock);
 	for (cb = &cblocks[0]; cb < &cblocks[NCBLOCK]; cb++) {
 		acquire(&cb->lock);
-		cb->next = cbfreelist.head;
+		cb->forw = cbfreelist.head;
 		if (cbfreelist.tail == NULL)
 			cbfreelist.tail = cb;
 		cbfreelist.head = cb;

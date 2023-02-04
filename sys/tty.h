@@ -21,12 +21,12 @@ struct sgttyb {
  * added to in reverse order. For example, if there was only 1 character in a
  * block, the block would be all zeros except its last byte.
  */
-struct cblock {
+extern struct cblock {
 	struct spinlock lock;	/* Spin lock */
-	struct cblock *next;	/* Next entry in character list */
+	struct cblock *forw;	/* Next entry in character list */
 	char chars[CBLKSIZ];	/* Data */
 	size_t size;		/* Size of data (to save time) */
-};
+} cblocks[NCBLOCK];
 
 /*
  * Handles all data going through character devices that are connected to

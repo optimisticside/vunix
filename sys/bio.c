@@ -162,7 +162,7 @@ void binit(void) {
 	acquire(&bfreelist.lock);
 	for (bp = &bufs[0]; bp < &bufs[NBUF]; bp++) {
 		acquire(&bp->lock);
-		bp->next = bfreelist.head;
+		bp->forw = bfreelist.head;
 		if (bfreelist.tail == NULL)
 			bfreelist.tail = bp;
 		bfreelist.head = bp;
