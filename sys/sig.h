@@ -6,7 +6,7 @@
  * and it can handle multiple types of these.
  */
 struct sigact {
-	void (*handler)(int signo, int icode);	/* Signal handler */
+	void *handler;		/* Address of signal handler */
 	int flags;		/* Additional flags */
 	size_t mask;		/* Signal mask to apply */
 };
@@ -32,6 +32,7 @@ struct sigact {
 #define SIGPIPE		13	/* Wrote to pipe with no reader */
 #define SIGALRM		14	/* Alaerm clock */
 #define SIGTERM		15	/* Termination signal from kill */
+#define SIGMAX		SIGTERM	/* Highest value of signals */
 
 /* Codes for SIGILL */
 #define ILL_ILLOPC	1	/* Illegal opcode */
