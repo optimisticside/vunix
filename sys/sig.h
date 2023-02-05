@@ -2,6 +2,16 @@
 #define _SIG_H_
 
 /*
+ * A signal action is something that can be called to handle a signal event,
+ * and it can handle multiple types of these.
+ */
+struct sigact {
+	void (*handler)(int signo, int icode);	/* Signal handler */
+	int flags;		/* Additional flags */
+	size_t mask;		/* Signal mask to apply */
+};
+
+/*
  * Macro for converting a signal number to a mask.
  */
 #define SIGMASK(n)	(1 << ((n) - 1))

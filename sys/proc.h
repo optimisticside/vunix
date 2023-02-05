@@ -4,6 +4,7 @@
 #include "types.h"
 #include "param.h"
 #include "lock.h"
+#include "sig.h"
 
 /*
  * A process is defined as an independent image of execution in the operating
@@ -15,6 +16,7 @@ extern struct proc {
 	int pid;			/* Unique identifier */
 	int exit;			/* Exit code */
 	char name[NNAME];		/* Name (for debugging purposes) */
+	struct sigacts sacts[NSIG];	/* Signal actions */
 	struct proc *parent;		/* Parent process (if applicable) */
 	struct tty *tty;		/* Controlling teletype */
 	struct pmap *map;		/* Address space */
