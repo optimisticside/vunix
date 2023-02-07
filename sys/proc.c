@@ -130,6 +130,12 @@ void wakeupn(void *wchan, int n) {
 }
 
 /*
+ * Expand the size of the current process.
+ */
+int expand(int n) {
+}
+
+/*
  * Calculates the priority for a thread to run, using its CPU usage along with
  * other priority-related data.
  */
