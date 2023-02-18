@@ -16,7 +16,7 @@ extern struct proc {
 	int pid;			/* Unique identifier */
 	int exit;			/* Exit code */
 	char name[NNAME];		/* Name (for debugging purposes) */
-	struct sigacts sacts[NSIG];	/* Signal actions */
+	struct sigact sacts[NSIG];	/* Signal actions */
 	struct proc *parent;		/* Parent process (if applicable) */
 	struct tty *tty;		/* Controlling teletype */
 	struct pmap *map;		/* Address space */

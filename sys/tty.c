@@ -25,7 +25,7 @@ struct cblock *cballoc(void) {
 			continue;
 		}
 		acquire(&cb->lock);
-		cbfreelist.head = cb->next;
+		cbfreelist.head = cb->forw;
 		if (cb == cbfreelist.tail)
 			cbfreelist.tail = NULL;
 		release(&cbfreelist.lock);
@@ -41,10 +41,10 @@ struct cblock *cballoc(void) {
 void putc(int c, struct cblock *cb) {
 	acquire(&cb->lock);
 	while (cb->size == CBLKSIZ) {
-		if (cb->next == NULL)
-			cb->next = cballoc();
+		if (cb->forw == NULL)
+			cb->forw = cballoc();
 		release(&cb->lock);
-		cb = cb->next;
+		cb = cb->forw;
 		acquire(&cb->lock);
 	}
 	cb->chars[CBLKSIZ - cb->size++] = c;

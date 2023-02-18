@@ -1,6 +1,8 @@
 #ifndef _SIG_H_
 #define _SIG_H_
 
+#include "types.h"
+
 /*
  * A signal action is something that can be called to handle a signal event,
  * and it can handle multiple types of these.

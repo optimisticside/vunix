@@ -2,6 +2,7 @@
 #define _PMAP_H_
 
 #include "types.h"
+#include "lock.h"
 
 typedef uint64_t pde_t; 	/* Page directory entry */
 typedef uint64_t pte_t;		/* Page table entry */

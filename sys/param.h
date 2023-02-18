@@ -20,6 +20,7 @@
 #define NBUF		256	/* Buffers */
 #define NCBLOCK		256	/* Character blocks */
 #define NNAME		128	/* Name for things */
+#define NSIG		64	/* Signals */
 #define CBLKSIZ		64	/* Character block size */
 #define MAXPATH		256	/* Path length */
 
