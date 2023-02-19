@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "param.h"
+#include "pmap.h"
 #include "lock.h"
 #include "sig.h"
 
