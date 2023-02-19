@@ -4,7 +4,7 @@ CFLAGS =  -nostdlib -ffreestanding -mcmodel=medany -march=rv32ima -mabi=ilp32 -g
 OBJ = $(wildcard *.c) $(wildcard *.h) $(wildcard *.S)
 
 os.elf: $(OBJ)
-	$(CC) $(CFLAGS) -T linker.ld -o os.elf $^
+	$(CC) $(CFLAGS) -T linker.ld -o vunix.elf $^
 
 clean:
 	rm -f *.elf *.img
