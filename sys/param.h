@@ -25,6 +25,13 @@
 #define MAXPATH		256	/* Path length */
 
 /*
+ * Definitions for other fundamental constants used throughout the system.
+ */
+#define NODEV		0	/* Device-number for non-existent devices */
+#define ROOTDEV		1	/* Boot disk */
+#define CONSDEV		1	/* Console */
+
+/*
  * System call errors. These are returned upon unsuccessful system calls.
  */
 #define EPERM		1	/* Operation not permitted */
@@ -41,11 +48,5 @@
 #define EPIPE		12	/* Broken pipe */
 #define ENOSYS		13	/* Invalid system call */
 #define ENFILE		14	/* Too many file descriptors */
-
-/*
- * I/O related constants.
- */
-#define ROOT_DEV	0	/* Boot disk */
-#define CONS_DEV	0	/* Console */
 
 #endif /* !_PARAM_H_ */

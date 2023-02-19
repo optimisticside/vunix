@@ -11,6 +11,8 @@
 #include "buf.h"
 #include "tty.h"
 
+__attribute__ ((aligned (16))) char stack0[4096 * NCPU];
+
 /*
  * Set by the first CPU after it has completed the initialization process. All
  * other CPUs will wait for this to be set before starting.
@@ -26,16 +28,30 @@ struct superblock *iinit(void) {
 	struct thread *td;
 
 	td = mycpu()->thread;
-	blkdevs[major(ROOT_DEV)].open(ROOT_DEV);
-	bp = bread(ROOT_DEV, SUPER_BLKNO);
+	blkdevs[major(ROOTDEV)].open(ROOTDEV);
+	bp = bread(ROOTDEV, SUPER_BLKNO);
 	cp = geteblk();
 	if (td->error)
 		panic("iinit");
 	memcpy(bp->addr, cp->addr, sizeof(struct superblock *));
 	brelease(bp);
 	mounts[0].buf = cp;
-	mounts[0].dev = ROOT_DEV;
+	mounts[0].dev = ROOTDEV;
 	return cp->addr;
+}
+
+#define UART        0x10000000
+#define UART_THR    (uint8_t*)(UART+0x00) // THR:transmitter holding register
+#define UART_LSR    (uint8_t*)(UART+0x05) // LSR:line status register
+#define UART_LSR_EMPTY_MASK 0x40          // LSR Bit 6: Transmitter empty; both the THR and LSR are empty
+
+int lib_putc(char ch) {
+	while ((*UART_LSR & UART_LSR_EMPTY_MASK) == 0);
+	return *UART_THR = ch;
+}
+
+void lib_puts(char *s) {
+	while (*s) lib_putc(*s++);
 }
 
 /*
@@ -45,6 +61,9 @@ void start(void) {
 	struct superblock *sb;
 	struct thread *td;
 	struct proc *p;
+
+	// for testing purposes.
+	lib_puts("Hello world\n");
 
 	p = palloc();
 	td = tdalloc();
@@ -56,8 +75,8 @@ void start(void) {
 	binit();
 	sb = iinit();
 
-	chrdevs[major(CONS_DEV)].open(CONS_DEV);
-	rootdir = iget(ROOT_DEV, rootino(sb));
+	chrdevs[major(CONSDEV)].open(CONSDEV);
+	rootdir = iget(ROOTDEV, rootino(sb));
 	rootdir->flags &= I_LOCK;
 	started = 1;
 }
