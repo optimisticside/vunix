@@ -23,3 +23,9 @@ struct mount mounts[NMOUNT];
 struct proc procs[NPROC];
 struct thread threads[NTHREAD];
 struct tty ttys[NTTY];
+
+/*
+ * Stack to be used by entry-point code (one stack per CPU is needed, since the
+ * entry-point runs on all CPUs).
+ */
+__attribute__ ((aligned (16))) char stack0[4096 * NCPU];
