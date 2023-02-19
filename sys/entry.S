@@ -1,6 +1,5 @@
-# qemu -kernel loads the kernel at 0x80000000 and causes each hart (i.e. CPU)
-# to jump there. kernel.ld causes the following code to be placed at
-# 0x80000000.
+# qemu -kernel loads the kernel at 0x80000000 and causes each hart (i.e. CPU) to jump there.
+# linker.ld causes the following code to be placed at 0x80000000.
 .section .text
 .global _entry
 _entry:
@@ -13,5 +12,5 @@ _entry:
 	addi a1, a1, 1
 	mul a0, a0, a1
 	add sp, sp, a0
-	# jump to start() in start.c
+	# Jump to start() in main.c
 	call start
