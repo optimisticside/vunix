@@ -47,7 +47,6 @@ struct devtab {
 #define	B_WANTED	64	/* Issue wakeup when BUSY goes off */
 #define	B_RELOC		128	/* No longer used */
 #define	B_ASYNC		246	/* Don't wait for I/O completion */
-#define	B_DELWRI	512	/* Don't write till block leaves available list */
 
 void binit(void);
 struct buf *bread(int dev, size_t blkno);
