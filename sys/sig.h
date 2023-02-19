@@ -80,4 +80,8 @@ struct sigact {
 #define POLL_PRI	5	/* High priority input available */
 #define POLL_HUP	6	/* Hangup (device disconnected) */
 
+void tdsignal(struct thread *td, int signo);
+void psignal(struct proc *p, int signo);
+int signal(struct tty *tp, int signo);
+
 #endif /* !_SIG_H_ */
