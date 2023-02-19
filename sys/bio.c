@@ -121,7 +121,7 @@ loop:
  *
  * If no buffer is found, then yields for a buffer to be available.
  */
-struct buf *bread(int dev, uint64_t blkno) {
+struct buf *bread(int dev, size_t blkno) {
 	struct buf *bp;
 	int size;
 
