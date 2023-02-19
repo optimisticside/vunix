@@ -116,6 +116,26 @@ loop:
 }
 
 /*
+ * Releases the given buffer.
+ */
+void brelease(struct buf *bp) {
+	acquire(&bp->lock);
+	if (bp->flags & B_WANTED)
+		wakeup(bp);
+	acquire(&bfreelist.lock);
+	wakeup(&bfreelist);
+	if (bp->flags & B_ERROR)
+		bp->dev = NODEV;
+	bp->flags &= ~(B_WANTED|B_BUSY|B_ASYNC);
+	if (bfreelist.tail == NULL)
+		bfreelist.tail = bp;
+	bp->forw = bfreelist.head;
+	bfreelist.head = bp;
+	release(&bp->lock);
+	release(&bfreelist.lock);
+}
+
+/*
  * Reads reads a block from a block device, allocates a buffer to store the
  * data, and returns the allocated buffer.
  *
@@ -142,12 +162,12 @@ void bwrite(struct buf *bp) {
 	int flags;
 
 	flags = bp->flags;
-	bp->flags &= ~(B_WRITE | B_DONE | B_ERROR | B_DELWRI);
+	bp->flags &= ~(B_WRITE | B_DONE | B_ERROR | B_DIRTY);
 	blkdevs[minor(bp->dev)].strat(bp);
-	if (flags & B_ASYNC == 0) {
+	if ((flags&B_ASYNC) == 0) {
 		iowait(bp);
 		brelease(bp);
-	} else if (flags & B_DELWRI == 0)
+	} else if ((flags&B_DIRTY) == 0)
 		geterror(bp);
 }
 
