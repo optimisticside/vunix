@@ -12,5 +12,6 @@ _entry:
 	addi a1, a1, 1
 	mul a0, a0, a1
 	add sp, sp, a0
-	# Jump to start() in main.c
-	call start
+	# Jump to main() in main.c
+	call main
+
