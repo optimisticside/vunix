@@ -35,7 +35,7 @@ void psignal(struct proc *p, int signo) {
 /*
  * Sends a signal to all processes who are controlled by the given teletype.
  */
-void signal(struct teletype *tp, int signo) {
+void signal(struct tty *tp, int signo) {
 	struct proc *p;
 
 	acquire(&tp->lock);

@@ -82,6 +82,6 @@ struct sigact {
 
 void tdsignal(struct thread *td, int signo);
 void psignal(struct proc *p, int signo);
-int signal(struct tty *tp, int signo);
+void signal(struct tty *tp, int signo);
 
 #endif /* !_SIG_H_ */
