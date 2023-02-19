@@ -86,3 +86,17 @@ void cbinit(void) {
 	}
 	release(&cbfreelist.lock);
 }
+
+/*
+ * Called within each teletype-device's initialization/opening routine, to
+ * establish the calling process's controlling teletype.
+ */
+void ttyopen(int dev, struct tty *tp) {
+	struct proc *p;
+
+	p = mycpu()->thread->proc;
+	acquire(&p->lock);
+	p->tty = tp;
+	tp->dev = dev;
+	release(&p->lock);
+}
