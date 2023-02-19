@@ -77,3 +77,9 @@ void uaputc(int dev, int c) {
 		continue;
 	mmiordb(UART0 + THR, ch);
 }
+
+int uagetc(int dev) {
+	if (mmiordb(UART0 + LSR) & LSR_RX_READY)
+		return mmiordb(UART0 + RHR);
+	return -1;
+}
