@@ -2,6 +2,7 @@
 #include "param.h"
 #include "lock.h"
 #include "proc.h"
+#include "tty.h"
 #include "sig.h"
 
 /*
