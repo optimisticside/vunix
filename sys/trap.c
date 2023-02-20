@@ -19,7 +19,10 @@ int utrap(struct trapframe *tf) {
 
 	c = mycpu();
 	td = c->thread;
+	p = td->proc;
 
+	signo = 0;
+	icode = 0;
 	excp = tf->scause & SCAUSE_CODE;
 	switch (excp) {
 	case SCAUSE_LOAD_ACCESS_FAULT:
@@ -47,4 +50,6 @@ int utrap(struct trapframe *tf) {
 		printf("%d:%d - Unknown userland exception %x at %x",
 			p->pid, td->tid, excp, tf->tp);	break;
 	}
+	if (signo != 0)
+		tdsignal(td, signo);
 }
