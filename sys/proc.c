@@ -103,6 +103,7 @@ void wakeup(void *wchan) {
 void wakeupn(void *wchan, int n) {
 	struct thread *td, *choice;
 
+	choice = NULL;
 	for (; n > 0; n--) {
 		for (td = &threads[0]; td < &threads[NTHREAD]; td++) {
 			acquire(&td->lock);
@@ -133,6 +134,7 @@ void wakeupn(void *wchan, int n) {
  * Expand the size of the current process.
  */
 int expand(int n) {
+	return -1;
 }
 
 /*
