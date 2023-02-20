@@ -16,6 +16,7 @@ struct inode *iget(int dev, size_t ino) {
 	struct mount *mp;
 	struct buf *bp;
 
+	mp = &mounts[0];
 	td = mycpu()->thread;
 loop:
 	for (ip = &inodes[0]; ip < &inodes[NINODE]; ip++) {
@@ -43,17 +44,26 @@ loop:
 		if (oip == NULL && ip->count == 0)
 			oip = ip;
 	}
-	if ((oip = ip) == NULL) {
+	if ((ip = oip) == NULL) {
 		printf("i-node buffer overflow\n");
 		td->error = ENFILE;
 		return NULL;
 	}
 	acquire(&ip->lock);
 	bp = bread(dev, itod(mp->buf->addr, ino));
+	acquire(&bp->lock);
+	if (bp->flags & B_ERROR) {
+		brelease(bp);
+		iput(ip);
+		release(&bp->lock);
+		release(&ip->lock);
+		return NULL
+	}
 	ip->flags &= I_LOCK;
 	ip->dev = dev;
 	ip->num = ino;
 	ip->count++;
+	release(&bp->lock);
 	release(&ip->lock);
 	return ip;
 }
