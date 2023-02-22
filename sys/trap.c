@@ -10,7 +10,7 @@
  * User-mode trap handler. Called for all exceptions originating from processes
  * in user-mode.
  */
-int utrap(struct trapframe *tf) {
+void utrap(struct trapframe *tf) {
 	struct thread *td;
 	struct proc *p;
 	struct cpu *c;
