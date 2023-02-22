@@ -67,3 +67,17 @@ loop:
 	release(&ip->lock);
 	return ip;
 }
+
+/*
+ * Deallocates an I-Node. Severs the connection to an I-Node in the core and
+ * decrements its reference count.
+ */
+void iput(struct inode *ip) {
+	acquire(&ip->lock);
+	if (ip->count == 1) {
+		/* TODO: Finish this */
+		ifree(ip->dev, ip->num);
+	}
+	ip->count--;
+	release(&ip->lock);
+}
