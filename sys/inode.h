@@ -30,7 +30,7 @@ extern struct inode {
 #define I_CHG	16		/* Modified */
 
 struct inode *iget(int dev, size_t ino);
-void iput(struct inode *ip, void *buf, size_t count);
+void iput(struct inode *ip);
 void readi(struct inode *ip, void *buf, size_t count);
 void writei(struct inode *ip, struct buf *bp);
 struct inode *namei(char *path);
