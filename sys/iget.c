@@ -57,7 +57,7 @@ loop:
 		iput(ip);
 		release(&bp->lock);
 		release(&ip->lock);
-		return NULL
+		return NULL;
 	}
 	ip->flags &= I_LOCK;
 	ip->dev = dev;
