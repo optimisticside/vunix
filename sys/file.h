@@ -8,12 +8,12 @@
  * Representation of a file-handle that processes can hold to access I-Nodes.
  * Hold things such as position, and access flags.
  */
-struct file {
+extern struct file {
 	char flags;		/* Access flags */
 	char count;		/* Reference count */
 	struct inode *inode;	/* Internal I-Node */
 	size_t offset;		/* Read/write character pointer */
-};
+} files[NFILE];
 
 /* File flags */
 #define	FREAD	1

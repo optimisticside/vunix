@@ -1,12 +1,13 @@
 #include "types.h"
 #include "param.h"
-
 #include "buf.h"
 #include "cpu.h"
 #include "conf.h"
+#include "file.h"
 #include "inode.h"
 #include "mount.h"
 #include "proc.h"
+#include "pmap.h"
 #include "tty.h"
 
 /*
