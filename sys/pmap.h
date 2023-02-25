@@ -21,7 +21,7 @@ extern struct pmap {
 	pdentry_t top;		/* Top-level page table */
 	int cpus;		/* CPUs currently active */
 	uint64_t satp;		/* Value of SATP register */
-} *kernmap;
+} pmaps[NPMAP], *kernmap;
 
 void pmswitch(struct pmap *map);
 struct pmap *pmalloc(void);

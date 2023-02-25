@@ -19,8 +19,9 @@
 #define NTTY		64	/* Teletypes */
 #define NBUF		256	/* Buffers */
 #define NCBLOCK		256	/* Character blocks */
-#define NNAME		128	/* Name for things */
+#define NPMAP		128	/* Page maps */
 #define NSIG		64	/* Signals */
+#define NNAME		128	/* Name for things */
 #define CBLKSIZ		64	/* Character block size */
 #define MAXPATH		256	/* Path length */
 
