@@ -15,6 +15,8 @@ extern struct proc {
 	char state;			/* Current state */
 	int flags;			/* Additional flags */
 	int pid;			/* Unique identifier */
+	int gid;			/* User-group ID */
+	int uid;			/* User ID */
 	int exit;			/* Exit code */
 	char name[NNAME];		/* Name (for debugging purposes) */
 	struct sigact sacts[NSIG];	/* Signal actions */
