@@ -57,4 +57,11 @@ static inline int cpuid(void) {
 	return rdcsr(mhartid);
 }
 
+/*
+ * Gets the number of ticks of the system's real-time clock.
+ */
+static inline size_t ticks(void) {
+	return rdcsr(time);
+}
+
 #endif /* !_MECHDEP_H_ */

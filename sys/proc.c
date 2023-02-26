@@ -1,9 +1,9 @@
 #include "types.h"
 #include "param.h"
+#include "machdep.h"
 #include "clock.h"
 #include "pmap.h"
 #include "lock.h"
-#include "proc.h"
 #include "cpu.h"
 
 /*
@@ -142,7 +142,7 @@ int expand(int n) {
  * other priority-related data.
  */
 static int getpri(struct thread *td) {
-	return td->cpu * (tick() - td->start);
+	return td->cpu * (ticks() - td->start);
 }
 
 /*
@@ -157,7 +157,7 @@ static struct thread *nexttd(void) {
 	/* Update the CPU usage of the last-ran thread */
 	c = mycpu();
 	if ((td = c->thread) != NULL) {
-		usage = tick() - td->start;
+		usage = ticks() - td->start;
 		td->cpu = usage + (usage - td->cpu) / 3;
 	}
 	res = NULL;
@@ -169,7 +169,7 @@ static struct thread *nexttd(void) {
 		release(&td->lock);
 	}
 	if (res != NULL)
-		res->start = tick();
+		res->start = ticks();
 	return res;
 }
 
