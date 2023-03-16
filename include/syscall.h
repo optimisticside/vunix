@@ -6,7 +6,7 @@
  * is not specified (as indicated with the absence of 'void' in the
  * parameters).
  */
-__attribute__ ((lp64_abi)) static inline uint64_t syscall() {
+__attribute__ ((lp64_abi)) uint64_t syscall() {
 	uint64_t result;
 
 	/*
