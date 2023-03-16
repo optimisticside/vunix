@@ -16,7 +16,7 @@ __attribute__ ((lp64_abi)) uint64_t syscall() {
 	 *
 	 * If GCC is smart, then it will remove the move insruction altogether.
 	 */
-	asm volatile ("ecall; mv %0, a0" : "=r" (result));
+	asm volatile ("ecall\n\tmv\t%0, a0" : "=r" (result));
 	return result;
 }
 
