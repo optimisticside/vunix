@@ -1,7 +1,7 @@
 #include "types.h"
 #include "param.h"
 #include "machdep.h"
-#include "clock.h"
+#include "proc.h"
 #include "pmap.h"
 #include "lock.h"
 #include "cpu.h"
