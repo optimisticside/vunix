@@ -16,6 +16,7 @@ struct inode *iget(int dev, size_t ino) {
 	struct mount *mp;
 	struct buf *bp;
 
+	oip = NULL;
 	mp = &mounts[0];
 	td = mycpu()->thread;
 loop:
