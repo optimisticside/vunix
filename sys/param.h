@@ -21,6 +21,7 @@
 #define NCBLOCK		256	/* Character blocks */
 #define NPMAP		128	/* Page maps */
 #define NSIG		64	/* Signals */
+#define NCALLO		128	/* Callouts */
 #define NNAME		128	/* Name for things */
 #define CBLKSIZ		64	/* Character block size */
 #define MAXPATH		256	/* Path length */

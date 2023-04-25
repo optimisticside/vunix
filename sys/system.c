@@ -16,6 +16,7 @@
  */
 struct blkdev blkdevs[NBLKDEV];
 struct buf bufs[NBUF];
+struct callo callos[NCALLO];
 struct cblock cblocks[NCBLOCK];
 struct chrdev chrdevs[NCHRDEV];
 struct cpu cpus[NCPU];
