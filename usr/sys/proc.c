@@ -53,8 +53,8 @@ void sleep(void *wchan) {
 	 * swtch() will return once our context is restored, which usually
 	 * when someone issues a wakeup on the channel we are sleeping on.
 	 */
-	swtch(&c->sched, curtd->ctx);
 	release(&curtd->lock);
+	swtch(&c->sched, curtd->ctx);
 }
 
 /*
