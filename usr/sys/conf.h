@@ -10,12 +10,12 @@
  * at a time. Examples of these include teletypes, and serial I/O.
  */
 extern struct chrdev {
-	int (*open)(int);	/* Open a device */
-	int (*close)(int);	/* Close a device */
-	int (*getc)(int);	/* Read a character */
-	int (*putc)(int, int);	/* Write a character */
-	int (*canrd)(int);	/* Determine whether a character can be read */
-	int (*canwr)(int);	/* Determine whether a character can be written */
+	int (*open)(int);			/* Open a device */
+	int (*close)(int);			/* Close a device */
+	int (*getc)(int);			/* Read a character */
+	int (*putc)(int, int);			/* Write a character */
+	int (*gtty)(int, struct sgttyb *);	/* Get attributes */
+	int (*stty)(int, struct sgttyb *);	/* Set attributes */
 } chrdevs[NCHRDEV];
 
 /*
