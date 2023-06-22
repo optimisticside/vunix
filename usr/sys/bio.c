@@ -20,8 +20,11 @@ struct buf *geteblk(void) {
 
 	for (;;) {
 		acquire(&bfreelist.lock);
-		if ((bp = bfreelist.head) == NULL)
+		if ((bp = bfreelist.head) == NULL) {
+			sleep(&bfreelist);
+			release(&bp->lock);
 			continue;
+		}
 		acquire(&bp->lock);
 		bfreelist.head = bp->forw;
 		bp->forw = NULL;
