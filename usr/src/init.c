@@ -39,5 +39,21 @@ int single(void) {
  * Runs the initialization shell-script located in /etc/rc.
  */
 void runcom(void) {
+	int pid;
 
+	pid = fork();
+	if (pid == 0)
+		execl("/bin/sh", "/etc/rc", 0);
+	while (wait(0) != pid)
+		continue;
+}
+
+/*
+ * Main system initialization routine. Sets up single-user mode, and then
+ * multi-user mode.
+ */
+int main(void) {
+	/* TODO: Finish this */
+	single();
+	runcom();
 }
