@@ -14,11 +14,9 @@
  * System table defenitions. These are tables usually defined in the header
  * files corresponding to their respective structures.
  */
-struct blkdev blkdevs[NBLKDEV];
 struct buf bufs[NBUF];
 struct callo callos[NCALLO];
 struct cblock cblocks[NCBLOCK];
-struct chrdev chrdevs[NCHRDEV];
 struct cpu cpus[NCPU];
 struct file files[NFILE];
 struct inode inodes[NINODE];
