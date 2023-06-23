@@ -66,20 +66,32 @@ void iowait(struct buf *bp) {
 }
 
 /*
+ * Determines if there is a buffer associated with the given block already in
+ * memory.
+ */
+struct buf *incore(int dev, size_t blkno) {
+	struct devtab *dp;
+	struct buf *bp;
+
+	dp = blkdevs[major(dev)].tab;
+	for (bp = &dp->)
+}
+
+/*
  * Allocates buffer and reads from device into buffer (or yields for buffer to
  * be available).
  */
 static struct buf *getblk(int dev, size_t blkno, int size) {
-	struct devtab *dt;
+	struct devtab *dp;
 	struct buf *bp;
 
 	if (major(dev) < NBLKDEV)
 		panic("blkdev");
 
 loop:
-	if ((dt = blkdevs[major(dev)].tab) == NULL)
+	if ((dp = blkdevs[major(dev)].tab) == NULL)
 		panic("devtab");
-	for (bp = dt->head; bp != NULL; bp = bp->forw) {
+	for (bp = dp->head; bp != NULL; bp = bp->forw) {
 		acquire(&bp->lock);
 		if (bp->blkno != blkno || bp->dev != dev || bp->size != size)
 			goto loop;
