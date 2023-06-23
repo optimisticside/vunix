@@ -74,7 +74,15 @@ struct buf *incore(int dev, size_t blkno) {
 	struct buf *bp;
 
 	dp = blkdevs[major(dev)].tab;
-	for (bp = &dp->)
+	for (bp = dp->head; bp != NULL; bp = bp->forw) {
+		acquire(&bp->lock);
+		if (bp->dev == dev && bp->blkno == blkno) {
+			release(&bp->lock);
+			return bp;
+		}
+		release(&bp->lock);
+	}
+	return NULL;
 }
 
 /*
