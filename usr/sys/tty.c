@@ -52,7 +52,7 @@ void putc(int c, struct cblock *cb) {
 }
 
 /*
- * Writes a character to a character list.
+ * Reads a character from a character list.
  */
 int getc(struct cblock *cb) {
 	char *cp;
@@ -99,4 +99,20 @@ void ttyopen(int dev, struct tty *tp) {
 	p->tty = tp;
 	tp->dev = dev;
 	release(&p->lock);
+}
+
+/*
+ * Flush all teletype queues.
+ */
+void flushtty(struct tty *tp) {
+	acquire(&tp->lock);
+	while (getc(&tp->canq) != 0)
+		continue;
+	wakeup(&tp->rawq);
+	wakeup(&tp->outq);
+	while (getc(&tp->rawq) != 0)
+		continue;
+	while (getc(&tp->outq) != 0)
+		continue;
+	release(&tp->lock);
 }
