@@ -11,22 +11,22 @@
 
 /*
  * UART control registers map. see [1] "PROGRAMMING TABLE"
- * note some are reused by multiple functions
+ * Note some are reused by multiple functions
  * 0 (write mode): THR/DLL
  * 1 (write mode): IER/DLM
  */
-#define RHR	0	/* Receive Holding Register (read mode) */
-#define THR	0	/* Transmit Holding Register (write mode) */
-#define DLL	0	/* LSB of Divisor Latch (write mode) */
-#define IER	1	/* Interrupt Enable Register (write mode) */
-#define DLM	1	/* MSB of Divisor Latch (write mode) */
-#define FCR	2	/* FIFO Control Register (write mode) */
-#define ISR	2	/* Interrupt Status Register (read mode) */
-#define LCR	3	/* Line Control Register */
-#define MCR	4	/* Modem Control Register */
-#define LSR	5	/* Line Status Register */
-#define MSR	6	/* Modem Status Register */
-#define SPR	7	/* ScratchPad Register */
+#define UA_RHR	0	/* Receive Holding Register (read mode) */
+#define UA_THR	0	/* Transmit Holding Register (write mode) */
+#define UA_DLL	0	/* LSB of Divisor Latch (write mode) */
+#define UA_IER	1	/* Interrupt Enable Register (write mode) */
+#define UA_DLM	1	/* MSB of Divisor Latch (write mode) */
+#define UA_FCR	2	/* FIFO Control Register (write mode) */
+#define UA_ISR	2	/* Interrupt Status Register (read mode) */
+#define UA_LCR	3	/* Line Control Register */
+#define UA_MCR	4	/* Modem Control Register */
+#define UA_LSR	5	/* Line Status Register */
+#define UA_MSR	6	/* Modem Status Register */
+#define UA_SPR	7	/* ScratchPad Register */
 
 /*
  * Line stuats register flags.
@@ -56,30 +56,30 @@ void uaopen(int dev) {
 	 * need to split the value of 3(0x0003) into two bytes, DLL stores the
 	 * low byte, DLM stores the high byte.
 	 */
-	mmiowrb(UART0 + IER, 0x00);
-	lcr = mmiordb(UART0 + LCR);
-	mmiowrb(LCR, lcr | (1 << 7));
-	mmiowrb(UART0 + DLL, 0x03);
-	mmiowrb(UART0 + DLM, 0x00);
+	mmiowrb(UART0 + UA_IER, 0x00);
+	lcr = mmiordb(UART0 + UA_LCR);
+	mmiowrb(UART0 + UA_LCR, lcr | (1 << 7));
+	mmiowrb(UART0 + UA_DLL, 0x03);
+	mmiowrb(UART0 + UA_DLM, 0x00);
 
 	/*
 	 * Continue setting the asynchronous data communication format, and
 	 * enable interrupts.
 	 */
 	lcr = 0;
-	mmiowrb(UART0 + LCR, lcr | (3 << 0));
-	ier = mmiordb(UART0 + IER);
-	mmiowrb(UART0 + IER, ier | (1 << 0));
+	mmiowrb(UART0 + UA_LCR, lcr | (3 << 0));
+	ier = mmiordb(UART0 + UA_IER);
+	mmiowrb(UART0 + UA_IER, ier | (1 << 0));
 }
 
 void uaputc(int dev, int c) {
-	while ((mmiordb(UART0 + LSR) & LSR_TX_EMPTY) == 0)
+	while ((mmiordb(UART0 + UA_LSR) & LSR_TX_EMPTY) == 0)
 		continue;
-	mmiordb(UART0 + THR, ch);
+	mmiordb(UART0 + UA_THR, ch);
 }
 
 int uagetc(int dev) {
-	if (mmiordb(UART0 + LSR) & LSR_RX_READY)
-		return mmiordb(UART0 + RHR);
+	if (mmiordb(UART0 + UA_LSR) & LSR_RX_READY)
+		return mmiordb(UART0 + UA_RHR);
 	return -1;
 }
