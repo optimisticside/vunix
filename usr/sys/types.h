@@ -25,4 +25,7 @@ struct tty;
 #define minor(dev)  ((dev) & 0xFFFF)
 #define	mkdev(maj, min)  ((uint32_t)((major) << 16 | (min)))
 
+/* Other operations */
+#define log2(x)	(31 - __builtin_clz(x))
+
 #endif /* !_TYPES_H_ */
