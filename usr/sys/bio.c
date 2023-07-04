@@ -162,6 +162,35 @@ struct buf *bread(int dev, size_t blkno) {
 }
 
 /*
+ * Reads a block from a block device like bread(), but also starts I/O on the
+ * given read-ahead block (which it automatically allocates).
+ */
+struct buf *breada(int dev, size_t blkno, size_t rablkno) {
+	struct buf *bp, *rabp;
+
+	if (incore(def, blkno)) {
+		bp = getblk(dev, blkno);
+		if ((bp->flags & B_DONE) == 0) {
+			bp->flags |= B_READ;
+			blkdevs[major(dev)].strat(bp)
+		}
+	}
+	if (rablkno && !incore(dev, rablkno)) {
+		rabp = getblk(dev, rablkno);
+		if ((rabp->flags & B_DONE) == 0)
+			brelse(rabp);
+		else {
+			rabp->flags |= B_READ | B_ASYNC;
+			blkdevs[major(dev)].strat(rabp);
+		}
+	}
+	if (bp == NULL)
+		return bread(dev, blkno);
+	iowait(bp);
+	return bp;
+}
+
+/*
  * Writes the buffer to its device and releases the buffer.
  */
 void bwrite(struct buf *bp) {
