@@ -18,6 +18,7 @@ struct {
 void btake(struct buf *bp) {
 	struct buf **bpp;
 
+	acquire(&bfreelist.lock);
 	bpp = &bfreelist.head;
 	while (*bpp && *bpp != bp)
 		bpp = &(*bpp)->forw;
@@ -29,6 +30,7 @@ void btake(struct buf *bp) {
 		*bpp = NULL;
 		bfreelist.tail = NULL;
 	}
+	release(&bfreelist.lock);
 }
 
 /*
