@@ -13,34 +13,54 @@ struct {
 } bfreelist;
 
 /*
+ * Removes a buffer from the free-list.
+ */
+void btake(struct buf *bp) {
+	struct buf **bpp;
+
+	bpp = &bfreelist.head;
+	while (*bpp && *bpp != bp)
+		bpp = &(*bpp)->forw;
+	if (bp && bp != bp->forw) {
+		bp->back->forw = bp->forw;
+		bp->forw->back = bp->back;
+		*bpp = bp->forw;
+	} else {
+		*bpp = NULL;
+		bfreelist.tail = NULL;
+	}
+}
+
+/*
  * Retrieves an empty buffer.
  */
-struct buf *geteblk(void) {
+struct buf *geteblk(size_t size) {
 	struct buf *bp;
 
-	for (;;) {
-		acquire(&bfreelist.lock);
-		if ((bp = bfreelist.head) == NULL) {
-			release(&bp->lock);
-			sleep(&bfreelist);
-			continue;
-		}
-		acquire(&bp->lock);
-		bfreelist.head = bp->forw;
-		bp->forw = NULL;
-		if (bp == bfreelist.tail)
-			bfreelist.tail = NULL;
-		release(&bfreelist.lock);
-		if (bp->flags&B_DIRTY) {
-			bp->flags |= B_ASYNC;
-			bwrite(bp);
-			release(&bp->lock);
-			continue;
-		}
-		bp->flags |= B_LOCK;
+loop:
+	acquire(&bfreelist.lock);
+	if ((bp = bfreelist.head) == NULL) {
 		release(&bp->lock);
-		return bp;
+		sleep(&bfreelist);
+		goto loop;
 	}
+	for (bp = bfreelist.head; bp->forw != NULL; bp++) {
+		acquire(&bp->lock);
+		if (bp->size == size)
+			break;
+		release(&bp->lock);
+	}
+	btake(bp);
+	release(&bfreelist.lock);
+	if (bp->flags&B_DIRTY) {
+		bp->flags |= B_ASYNC;
+		bwrite(bp);
+		release(&bp->lock);
+		goto loop;
+	}
+	bp->flags |= B_LOCK;
+	release(&bp->lock);
+	return bp;
 }
 
 /*
@@ -89,12 +109,14 @@ struct buf *incore(int dev, size_t blkno) {
  * Allocates buffer and reads from device into buffer (or yields for buffer to
  * be available).
  */
-static struct buf *getblk(int dev, size_t blkno, int size) {
+static struct buf *getblk(int dev, size_t blkno) {
 	struct devtab *dp;
 	struct buf *bp;
+	size_t size;
 
 	if (major(dev) < NBLKDEV)
 		panic("blkdev");
+	size = blkdevs[major(dev)].blksz;
 
 loop:
 	if ((dp = blkdevs[major(dev)].tab) == NULL)
@@ -112,7 +134,7 @@ loop:
 		release(&bp->lock);
 		return bp;
 	}
-	bp = geteblk();
+	bp = geteblk(size);
 	acquire(&bp->lock);
 	bp->dev = dev;
 	bp->blkno = blkno;
@@ -149,10 +171,8 @@ void brelease(struct buf *bp) {
  */
 struct buf *bread(int dev, size_t blkno) {
 	struct buf *bp;
-	int size;
 
-	size = blkdevs[major(dev)].blksz;
-	bp = getblk(dev, blkno, size);
+	bp = getblk(dev, blkno);
 	if (bp->flags&B_DONE)
 		return bp;
 	bp->flags |= B_READ;
@@ -167,12 +187,14 @@ struct buf *bread(int dev, size_t blkno) {
  */
 struct buf *breada(int dev, size_t blkno, size_t rablkno) {
 	struct buf *bp, *rabp;
+	size_t blksz;
 
-	if (incore(def, blkno)) {
+	blksz = blkdevs[major(dev)].blksz;
+	if (incore(dev, blkno)) {
 		bp = getblk(dev, blkno);
 		if ((bp->flags & B_DONE) == 0) {
 			bp->flags |= B_READ;
-			blkdevs[major(dev)].strat(bp)
+			blkdevs[major(dev)].strat(bp);
 		}
 	}
 	if (rablkno && !incore(dev, rablkno)) {
