@@ -13,13 +13,12 @@ struct {
 } bfreelist;
 
 /*
- * Removes a buffer from the free-list.
+ * Removes a buffer from a queue with the given head and tail pointers..
  */
-void btake(struct buf *bp) {
+void rmbuf(struct buf *bp, struct buf **head, struct buf **tail) {
 	struct buf **bpp;
 
-	acquire(&bfreelist.lock);
-	bpp = &bfreelist.head;
+	bpp = head;
 	while (*bpp && *bpp != bp)
 		bpp = &(*bpp)->forw;
 	if (bp && bp != bp->forw) {
@@ -28,9 +27,8 @@ void btake(struct buf *bp) {
 		*bpp = bp->forw;
 	} else {
 		*bpp = NULL;
-		bfreelist.tail = NULL;
+		*tail = NULL;
 	}
-	release(&bfreelist.lock);
 }
 
 /*
@@ -52,7 +50,7 @@ loop:
 			break;
 		release(&bp->lock);
 	}
-	btake(bp);
+	rmbuf(bp, &bfreelist.head, &bfreelist.tail);
 	release(&bfreelist.lock);
 	if (bp->flags&B_DIRTY) {
 		bp->flags |= B_ASYNC;
@@ -149,6 +147,8 @@ loop:
  * Releases the given buffer.
  */
 void brelease(struct buf *bp) {
+	struct devtab *dp;
+
 	acquire(&bp->lock);
 	if (bp->flags & B_WANTED)
 		wakeup(bp);
@@ -157,9 +157,16 @@ void brelease(struct buf *bp) {
 	if (bp->flags & B_ERROR)
 		bp->dev = NODEV;
 	bp->flags &= ~(B_WANTED|B_BUSY|B_ASYNC);
+	if ((dp = &blkdevs[major(bp->dev)]) == NULL)
+		panic("devtab");
+	acquire(&dp->lock);
+	rmbuf(bp, &dp->head, &dp->tail);
+	rmbuf(bp, &dp->iohead, &dp->iotail);
+	release(&dp.lock);
 	if (bfreelist.tail == NULL)
 		bfreelist.tail = bp;
 	bp->forw = bfreelist.head;
+	bp->back = NULL;
 	bfreelist.head = bp;
 	release(&bp->lock);
 	release(&bfreelist.lock);
