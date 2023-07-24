@@ -60,11 +60,11 @@ loop:
 		release(&ip->lock);
 		return NULL;
 	}
+	release(&bp->lock);
 	ip->flags &= I_LOCK;
 	ip->dev = dev;
 	ip->num = ino;
 	ip->count++;
-	release(&bp->lock);
 	release(&ip->lock);
 	return ip;
 }
