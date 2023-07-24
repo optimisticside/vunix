@@ -12,14 +12,14 @@ void readi(struct inode *ip, size_t offset, void *buf, size_t count) {
 	struct thread *td;
 	struct buf *bp;
 	int bshift, bmask, dev;
-	size_t blksiz, blkno;
+	size_t blksz, blkno;
 
 	dev = ip->dev;
 	td = mycpu()->thread;
 	if ((ip->mode & I_FMT) == IF_CHAR)
 		return (*chrdevs[major(dev)].read)(minor(dev));
-	blksiz = blkdevs[major(dev)].blksiz;
-	bshift = log2(blksiz);
+	blksz = blkdevs[major(dev)].blksz;
+	bshift = log2(blksz);
 	blkno = offset >> bshift;
 	do {
 
