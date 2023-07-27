@@ -146,7 +146,7 @@ loop:
 /*
  * Releases the given buffer.
  */
-void brelease(struct buf *bp) {
+void brelse(struct buf *bp) {
 	struct devtab *dp;
 
 	acquire(&bp->lock);
@@ -232,7 +232,7 @@ void bwrite(struct buf *bp) {
 	blkdevs[minor(bp->dev)].strat(bp);
 	if ((flags&B_ASYNC) == 0) {
 		iowait(bp);
-		brelease(bp);
+		brelse(bp);
 	} else if ((flags&B_DIRTY) == 0)
 		geterror(bp);
 }

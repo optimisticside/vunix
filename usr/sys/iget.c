@@ -54,7 +54,7 @@ loop:
 	bp = bread(dev, itod(mp->buf->addr, ino));
 	acquire(&bp->lock);
 	if (bp->flags & B_ERROR) {
-		brelease(bp);
+		brelse(bp);
 		iput(ip);
 		release(&bp->lock);
 		release(&ip->lock);

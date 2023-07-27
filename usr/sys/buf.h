@@ -52,7 +52,8 @@ struct devtab {
 
 void binit(void);
 struct buf *bread(int dev, size_t blkno);
-void brelease(struct buf *bp);
+struct buf *breada(int dev, size_t blkno, size_t rablkno);
+void brelse(struct buf *bp);
 void bwrite(struct buf *bp);
 struct buf *geteblk(void);
 
