@@ -52,4 +52,5 @@ void printf(const char *fmt, ...) {
 				putchar(c);
 		}
 	}
+	va_end(args);
 }
