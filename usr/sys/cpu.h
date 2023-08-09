@@ -46,7 +46,8 @@ struct trapframe {
 extern struct cpu {
 	struct thread *thread;	/* Currently running thread */
 	struct context sched;	/* Context to switch to for scheduler loop */
-	int nirq;		/* Number of nested interrupts */	
+	struct pmap *pmap;	/* Current page-map */
+	int nirq;		/* Number of nested interrupts */
 } cpus[NCPU];
 
 /*
