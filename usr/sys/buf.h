@@ -55,6 +55,6 @@ struct buf *bread(int dev, size_t blkno);
 struct buf *breada(int dev, size_t blkno, size_t rablkno);
 void brelse(struct buf *bp);
 void bwrite(struct buf *bp);
-struct buf *geteblk(void);
+struct buf *geteblk(size_t size);
 
 #endif /* !_BUF_H_ */
